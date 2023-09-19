@@ -1,7 +1,11 @@
 # include<stdio.h>
+# include<stdlib.h>
+#include<string.h>
+void depart();
+void homePage();
 int main()
 {
-  printf("Welcome to TaskScaces");
+  homePage();
   return 0; 
 }
 void homePage()
@@ -27,13 +31,13 @@ void homePage()
       case 2:
           break;
       case 3:
-          exit();
+          depart();
           break;
       default:
-          exit();
+          depart();
   }            
 }
-void exit()
+void depart()
 { 
   printf("Are you sure you want to exit?(YES/NO)");
   char input[3];
@@ -49,8 +53,5 @@ void exit()
       printf("|⌊________________________________________________________________________⌋|  ");
       exit(0);
   }
-  else          
-  {
-      homePage();
-  }
+  else  homePage();
 }
