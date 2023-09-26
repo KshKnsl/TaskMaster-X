@@ -18,11 +18,11 @@ void homePage()
   printf("||    \\    /  \\    /  |_____ |      |       |     | | \\  / | |_____    ||\n");
   printf("||     \\  /    \\  /   |      |      |       |     | |  \\/  | |         ||\n");
   printf("||      \\/      \\/    |===== |_____ |====== \\=====/ |      | |=====    ||\n");
-  printf("||                           TO TaskScapes                             ||\n");
+  printf("||                           TO TaskMaster X                           ||\n");
   printf("||     MENU:-                                                          ||\n");
   printf("||   1.                                                                ||\n");
   printf("||   2.                                                                ||\n");
-  printf("||   3.CLOSE TASKSCAPES                                                ||\n");
+  printf("||   3.CLOSE TASKMASTER X                                              ||\n");
   printf("||_____________________________________________________________________||\n");
   printf("ENTER YOUR CHOICE::");
   scanf("%d",&choice);
