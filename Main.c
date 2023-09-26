@@ -1,11 +1,11 @@
-# include<stdio.h>
-# include<stdlib.h>
+#include<stdio.h>
+#include<stdlib.h>
 #include<string.h>
-void depart();
+#include<math.h>
+void escape();
 void homePage();
 int main()
 {
-    depart();
   homePage();
   return 0;
 }
@@ -33,18 +33,19 @@ void homePage()
       case 2:
           break;
       case 3:
-          depart();
+          escape();
           break;
       default:
-          depart();
+          escape();
   }
 }
-void depart()
+void escape()
 {
   printf("\nAre you sure you want to exit?(YES/NO)");
-  char input[3];
-  scanf("%s", input);
-  if(strcmp(input,"YES")==0)
+  char ch; 
+  scanf("%c", &ch);
+  scanf("%c", &ch);
+  if(ch=='Y')
   {
       printf("\n  ________________________________________________________________________");
       printf("\n||                                                                        ||");
