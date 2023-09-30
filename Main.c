@@ -5,6 +5,9 @@
 #include<string.h>
 #include<math.h>
 void escape();
+void login();
+void createAccount();
+void guest();
 void homePage();
 int main()
 {
