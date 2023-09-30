@@ -9,6 +9,8 @@ void login();
 void createAccount();
 void guest();
 void homePage();
+int mainMenu();
+void taskMenu();
 int main()
 {
   homePage();
@@ -66,4 +68,21 @@ void escape()
       exit(0);
   }
   else  homePage();
+}
+int mainMenu()
+{
+    //This function is used to print the Menu of the Todo list and returns a choice entered by the user.
+    int choice;
+    system("cls");          //clears the screen.
+    printf("\n\nEnter your choice : ");
+    printf("\n\t\t\t\t\t\t 1. See your ToDo List. \n");
+    printf("\n\t\t\t\t\t\t 2. Update your ToDo List. \n");
+    printf("\n\t\t\t\t\t\t 3. Create a new ToDo List. \n");
+    printf("\n\t\t\t\t\t\t 4. Delete your ToDo List. \n");
+    printf("\n\t\t\t\t\t\t 5. Edit task(s) in your ToDo List. \n");
+    printf("\n\t\t\t\t\t\t 6. Exit ");
+    printf("\n\n");
+    printf("\n\t\t\t\t\t\t Enter your choice \n\t\t\t\t\t\t --> ");
+    scanf("%d",&choice);
+    return choice;
 }
