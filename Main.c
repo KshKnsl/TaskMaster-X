@@ -1,5 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<stdbool.h>
+#include<conio.h>
 #include<string.h>
 #include<math.h>
 void escape();
@@ -20,8 +22,9 @@ void homePage()
   printf("||      \\/      \\/    |===== |_____ |====== \\=====/ |      | |=====    ||\n");
   printf("||                           TO TaskMaster X                           ||\n");
   printf("||     MENU:-                                                          ||\n");
-  printf("||   1.                                                                ||\n");
-  printf("||   2.                                                                ||\n");
+  printf("||   1.Login                                                           ||\n");
+  printf("||   2.Create a new account                                            ||\n");
+  printf("||   3.Guest Mode                                                      ||\n");
   printf("||   3.CLOSE TASKMASTER X                                              ||\n");
   printf("||_____________________________________________________________________||\n");
   printf("ENTER YOUR CHOICE::");
@@ -33,6 +36,8 @@ void homePage()
       case 2:
           break;
       case 3:
+          break;
+      case 4:
           escape();
           break;
       default:
