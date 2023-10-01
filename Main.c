@@ -112,7 +112,7 @@ void login()
     {
         if(user.loginID==user.loginID&&user.Password==user.Password) 
         {
-            user.veriied=true;
+            user.verified=true;
             break;
         }
     }
@@ -127,7 +127,7 @@ void login()
     {
         printf("Login failed. Please check your credentials or create a new account.\n");
         DEFAULT:
-        print("Options:\n1.Create a new account\n2.Return to Home page\n3.Retry\n4.Exit\n");
+        printf("Options:\n1.Create a new account\n2.Return to Home page\n3.Retry\n4.Exit\n");
         printf("Enter your choice  :  ");
         int choice;
         scanf("%d",&choice);
@@ -141,4 +141,3 @@ void login()
         }       
     }
 }
-
