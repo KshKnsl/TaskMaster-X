@@ -124,7 +124,7 @@ void login()
     {
         printf("Login successful!\n");
         int choice = mainMenu();
-        // Handle the choice based on your application logic
+        //Handle the choice based on user's input from main menu
     }
     else 
     {
@@ -143,4 +143,17 @@ void login()
             default :   goto DEFAULT;
         }       
     }
+}
+void guest()
+{
+    
+    printf("\nGuest Mode Loading.....\n");
+    struct Credentials guestUser;
+    guestUser.loginID = 12345;
+    guestUser.Password = 12345;
+    guestUser.verified = true;
+    printf("\nGuest Mode READY.....\n");
+    printf("Welcome, Guest!\n");
+    int choice = mainMenu();
+    // Handle the choice based on user's input from main menu
 }
