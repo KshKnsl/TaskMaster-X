@@ -43,10 +43,13 @@ void homePage()
   switch(choice)
   {
       case 1:
+          login();
           break;
       case 2:
+          createAccount();
           break;
       case 3:
+          guest();
           break;
       case 4:
           escape();
