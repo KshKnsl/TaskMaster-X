@@ -4,12 +4,14 @@
 #include<conio.h>
 #include<string.h>
 #include<math.h>
+
 struct Credentials
 {
     long loginID;
     long Password;
     bool verified;
 };
+
 void escape();
 void login();
 void createAccount();
@@ -17,11 +19,13 @@ void guest();
 void homePage();
 int mainMenu();
 void taskMenu();
+
 int main()
 {
   homePage();
   return 0;
 }
+
 void homePage()
 {
   int choice;
@@ -58,9 +62,10 @@ void homePage()
           escape();
   }
 }
+
 void escape()
 {
-  printf("\nAre you sure you want to exit?(YES/NO)");
+  printf("\nAre you sure you want to exit?(YES/NO)---");
   char ch; 
   scanf("%c", &ch);
   scanf("%c", &ch);
@@ -78,6 +83,7 @@ void escape()
   }
   else  homePage();
 }
+
 int mainMenu()
 {
     //This function is used to print the Menu of the Todo list and returns a choice entered by the user.
@@ -95,7 +101,12 @@ int mainMenu()
     scanf("%d",&choice);
     return choice;
 }
-void login() 
+
+void taskMenu()
+{
+}
+
+void login()
 {
     struct Credentials user;
     printf("Login\n");
@@ -144,6 +155,11 @@ void login()
         }       
     }
 }
+
+void createAccount()
+{
+}
+
 void guest()
 {
     
