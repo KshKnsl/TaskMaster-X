@@ -92,3 +92,53 @@ int mainMenu()
     scanf("%d",&choice);
     return choice;
 }
+void login() 
+{
+    struct Credentials user;
+    printf("Login\n");
+    printf("Enter your Login ID: ");
+    scanf("%ld", &user.loginID);
+    printf("Enter your Password: ");
+    scanf("%ld", &user.Password);
+
+    FILE *file = fopen("Credentials.txt", "r");
+    if(file==NULL)
+    {
+        printf("Error opening the file.\n");
+        return;
+    }
+    user.verified=false;
+    while(fread(&user, sizeof(struct Credentials),1,file)) 
+    {
+        if(user.loginID==user.loginID&&user.Password==user.Password) 
+        {
+            user.veriied=true;
+            break;
+        }
+    }
+    fclose(file);
+    if(user.verified) 
+    {
+        printf("Login successful!\n");
+        int choice = mainMenu();
+        // Handle the choice based on your application logic
+    }
+    else 
+    {
+        printf("Login failed. Please check your credentials or create a new account.\n");
+        DEFAULT:
+        print("Options:\n1.Create a new account\n2.Return to Home page\n3.Retry\n4.Exit\n");
+        printf("Enter your choice  :  ");
+        int choice;
+        scanf("%d",&choice);
+        switch(choice)
+        {
+            case 1 :    createAccount();    break;
+            case 2 :    homePage();         break;
+            case 3 :    login();            break;
+            case 4 :    escape();           break;
+            default :   goto DEFAULT;
+        }       
+    }
+}
+
