@@ -31,7 +31,7 @@ int main()
 void homePage()
 {
     system("cls");
-    system("color 5F");
+    system("color 14");
     int choice;
     printf("\n  _____________________________________________________________________\n");
     printf("||                                                                     ||\n");
@@ -44,12 +44,12 @@ void homePage()
     printf("||   1.Login                                                           ||\n");
     printf("||   2.Create a new account                                            ||\n");
     printf("||   3.Guest Mode                                                      ||\n");
-    printf("||   3.CLOSE TASKMASTER X                                              ||\n");
+    printf("||   4.CLOSE TASKMASTER X                                              ||\n");
     printf("||_____________________________________________________________________||\n");
     printf("ENTER YOUR CHOICE::");
     scanf("%d",&choice);
     printf("\nLoading.....\n");
-    sleep(3);
+    sleep(1);
     switch(choice)
     {
         case 1:
@@ -78,16 +78,17 @@ void escape()
 
   if(ch=='Y'||ch=='y')
   {
-      printf("\n  ________________________________________________________________________");
-      printf("\n||                                                                        ||");
-      printf("\n|| ---------- |     |    /\\    |\\    | |  /      \\     / |=====| |    |   ||");
-      printf("\n||     ||     |     |   /  \\   | \\   | | /        \\   /  |     | |    |   ||");
-      printf("\n||     ||     |=====|  /====\\  |  \\  | |/          \\=/   |     | |    |   ||");
-      printf("\n||     ||     |     | /      \\ |   \\ | |\\           |    |     | |    |   ||");
-      printf("\n||     ||     |     |/        \\|    \\| | \\          |    |=====| |====|   ||");
-      printf("\n||________________________________________________________________________||\n");  
-      sleep(15);
-      exit(0);
+    printf("\n  ________________________________________________________________________");
+    printf("\n||                                                                        ||");
+    printf("\n|| ---------- |     |    /\\    |\\    | |  /      \\     / |=====| |    |   ||");
+    printf("\n||     ||     |     |   /  \\   | \\   | | /        \\   /  |     | |    |   ||");
+    printf("\n||     ||     |=====|  /====\\  |  \\  | |/          \\=/   |     | |    |   ||");
+    printf("\n||     ||     |     | /      \\ |   \\ | |\\           |    |     | |    |   ||");
+    printf("\n||     ||     |     |/        \\|    \\| | \\          |    |=====| |====|   ||");
+    printf("\n||________________________________________________________________________||\n");  
+    sleep(15);
+    system("cls");
+    exit(0);
   }
   else  
   {
@@ -129,12 +130,12 @@ void login()
         return;
     }
     user.verified=false;
-
-    while(fread(&user, sizeof(struct Credentials),1,file)) 
+    struct Credentials existingUser;
+    while(fread(&existingUser, sizeof(struct Credentials), 1, file)) 
     {
-        if(user.loginID==user.loginID&&user.Password==user.Password) 
+        if(existingUser.loginID == user.loginID && existingUser.Password == user.Password) 
         {
-            user.verified=true;
+            user.verified = true;
             break;
         }
     }
@@ -175,8 +176,7 @@ void createAccount()
     struct Credentials newUser;
     printf("To Create a New Account\n");
     printf("Enter your fUll name : ");
-    gets(name);
-    gets(name);
+    scanf("%19s", name);
     retry:
     printf("\nEnter your date of birth(format DDMMYY) : ");
     scanf("%d",&dob);
@@ -237,6 +237,7 @@ void guest()
     guestUser.Password = 12345;
     guestUser.verified = true;
     printf("\nGuest Mode READY.....\n");
+    sleep(3);
     printf("Welcome, Guest!\n");
     int choice = mainMenu();
     // Handle the choice based on user's input from main menu
