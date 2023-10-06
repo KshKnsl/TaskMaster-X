@@ -18,6 +18,7 @@ TaskMaster X is a simple text-based user authentication and task management syst
 **#Compile the C code:**
    ```bash
    gcc taskmaster-x.c -o taskmaster-x
+
 Run the program:
 
    ```bash
