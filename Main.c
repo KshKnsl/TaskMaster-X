@@ -31,7 +31,7 @@ int main()
 void homePage()
 {
     system("cls");
-    system("color 14");
+    system("color 12");
     int choice;
     printf("\n  _____________________________________________________________________\n");
     printf("||                                                                     ||\n");
@@ -72,9 +72,9 @@ void homePage()
 void escape()
 {
   printf("\nAre you sure you want to exit?(YES/NO)---");
-  char ch; 
-  scanf("%c", &ch);
-  scanf("%c", &ch);
+  char ch;
+  scanf("%c",&ch);
+  scanf("%c",&ch);
 
   if(ch=='Y'||ch=='y')
   {
@@ -85,12 +85,12 @@ void escape()
     printf("\n||     ||     |=====|  /====\\  |  \\  | |/          \\=/   |     | |    |   ||");
     printf("\n||     ||     |     | /      \\ |   \\ | |\\           |    |     | |    |   ||");
     printf("\n||     ||     |     |/        \\|    \\| | \\          |    |=====| |====|   ||");
-    printf("\n||________________________________________________________________________||\n");  
+    printf("\n||________________________________________________________________________||\n");
     sleep(15);
     system("cls");
     exit(0);
   }
-  else  
+  else
   {
     homePage();
   }
@@ -114,43 +114,60 @@ int mainMenu()
     return choice;
 }
 
-void login()
+void writeCredentialsToFile(long loginID, long Password)
 {
-    struct Credentials user;
-    printf("Login\n");
-    printf("Enter your Login ID: ");
-    scanf("%ld", &user.loginID);
-    printf("Enter your Password: ");
-    scanf("%ld", &user.Password);
-
-    FILE *file = fopen("Credentials.txt", "r");
+    FILE *file=fopen("Credentials.txt","a");
     if(file==NULL)
     {
-        printf("Error opening the file.\n");
+        printf("Error opening the file for writing.\n");
         return;
     }
-    user.verified=false;
-    struct Credentials existingUser;
-    while(fread(&existingUser, sizeof(struct Credentials), 1, file)) 
+    fprintf(file,"%ld,%ld\n",loginID,Password);
+    fflush(file);
+    fclose(file);
+}
+
+
+bool readCredentialsFromFile(long loginID, long Password)
+{
+    FILE *file = fopen("Credentials.txt","r");
+    long storedLoginID, storedPassword;
+    bool found = false;
+    char line[100];
+    while(fgets(line,sizeof(line),file)!=NULL)
     {
-        if(existingUser.loginID == user.loginID && existingUser.Password == user.Password) 
+        sscanf(line,"%ld,%ld",&storedLoginID,&storedPassword);
+        if(loginID==storedLoginID&&Password==storedPassword)
         {
-            user.verified = true;
+            found=true;
             break;
         }
     }
     fclose(file);
+    return found;
+}
 
-    if(user.verified) 
+void login()
+{
+    struct Credentials user;
+    printf("**************************************\n");
+    printf("*                 Login              *\n");
+    printf("**************************************\n");
+    printf("Enter your Login ID: ");
+    scanf("%ld", &user.loginID);
+    printf("Enter your Password: ");
+    scanf("%ld", &user.Password);
+    if(readCredentialsFromFile(user.loginID, user.Password))
     {
-        printf("Login successful!\n");
-        
+        printf("**************************************\n");
+        printf("*          Login Successful          *\n");
+        printf("**************************************\n");
         printf("\nMAIN MENU Loading.....\n");
         sleep(5);
         int choice = mainMenu();
-        //Handle the choice based on user's input from main menu
+        // Handle the choice based on user's input from the main menu
     }
-    else 
+    else
     {
         printf("Login failed. Please check your credentials or create a new account.\n");
         DEFAULT:
@@ -165,71 +182,47 @@ void login()
             case 3 :    login();            break;
             case 4 :    escape();           break;
             default :   goto DEFAULT;
-        }       
+        }
     }
 }
 
 void createAccount()
 {
     char name[20];
-    int dob=0;
+    int dob = 0;
     struct Credentials newUser;
     printf("To Create a New Account\n");
-    printf("Enter your fUll name : ");
+    printf("Enter your first name: ");
     scanf("%19s", name);
     retry:
-    printf("\nEnter your date of birth(format DDMMYY) : ");
-    scanf("%d",&dob);
+    printf("Enter your date of birth (format DDMMYY): ");
+    scanf("%d", &dob);
 
     if(!validate(dob))
     {
         printf("\nWrong Date of birth......Retry.....");
         goto retry;
     }
-
+    else
+    {
+        printf("------Date Validated------- \n");
+    }
     printf("\nEnter a new Login ID: ");
-    scanf("%ld",&newUser.loginID);    
-    // Check if the login ID already exists
-    printf("Loading.....\n");
-    sleep(2);
-    FILE *file=fopen("Credentials.txt","r");
-    if(file!=NULL) 
-    {
-        struct Credentials existingUser;
-        while(fread(&existingUser,sizeof(struct Credentials),1,file)) 
-        {
-            if(existingUser.loginID==newUser.loginID) 
-            {
-                fclose(file);
-                printf("Login ID already exists. Please choose a different one.\n");
-                return;
-            }
-        }
-        fclose(file);
-    }
-
-    printf("\nEnter a new Password: ");
+    scanf("%ld", &newUser.loginID);
+    printf("Enter a new Password: ");
     scanf("%ld", &newUser.Password);
-    newUser.verified=true;
-    file=fopen("Credentials.txt","a");// Open the file in append mode
-    if(file==NULL)
-    {
-        printf("Error opening the file for writing.\n");
-        return;
-    }
-    
-    //Writing the new user's credentials to the file
-    fwrite(&newUser, sizeof(struct Credentials), 1, file);
-    fclose(file);
+    newUser.verified = true;
+    // Write the new user's credentials to the file
+    writeCredentialsToFile(newUser.loginID, newUser.Password);
     printf("\nAccount created successfully!\n");
-    printf("Now you will be guided to login page.\nEnter your credentials there to login\n");
+    printf("Now you will be guided to the login page.\nEnter your credentials there to log in\n");
     sleep(3);
+    system("cls");
     login();
 }
 
 void guest()
 {
-    
     printf("\nGuest Mode Loading.....\n");
     sleep(3);
     struct Credentials guestUser;
@@ -238,7 +231,9 @@ void guest()
     guestUser.verified = true;
     printf("\nGuest Mode READY.....\n");
     sleep(3);
-    printf("Welcome, Guest!\n");
+        printf("**************************************\n");
+        printf("*          WELCOME GUEST             *\n");
+        printf("**************************************\n");
     int choice = mainMenu();
     // Handle the choice based on user's input from main menu
 }
@@ -249,8 +244,12 @@ bool validate(int dob)
     int month=(dob/100)%100;
     int year=dob%100;
     if(year<0||year>99||month<1||month>12||day<1||day>31)
-        return false;
+    {
+         return false;
+    }
     if((month==2&&day>29)||((month==4||month==6||month==9||month==11)&&day>30))
+    {
         return false;
+    }
     return true;
 }
