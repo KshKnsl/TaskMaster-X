@@ -105,7 +105,7 @@ void escape()
     printf("\n||     ||     |     | /      \\ |   \\ | |\\           |    |     | |    |   ||");
     printf("\n||     ||     |     |/        \\|    \\| | \\          |    |=====| |====|   ||");
     printf("\n||________________________________________________________________________||\n");
-    sleep(15);
+    sleep(7);
     system("cls");
     exit(0);
   }
@@ -119,8 +119,19 @@ int mainMenu()
 {
     //This function is used to print the Menu of the Todo list and returns a choice entered by the user.
     int choice;
+    
     system("cls");          //clears the screen.
-    printf("\n\nEnter your choice : ");
+    system("color 4F");
+    
+    printf("\n");
+
+    printf("\t\t\t\t\t**************************************\n");
+    printf("\t\t\t\t\t***                                ***\n");
+    printf("\t\t\t\t\t***            MAIN MENU           ***\n");
+    printf("\t\t\t\t\t***                                ***\n");
+    printf("\t\t\t\t\t**************************************\n");
+    
+    printf("\nEnter your choice : ");
     printf("\n\t\t\t\t\t\t 1. See your ToDo List. \n");
     printf("\n\t\t\t\t\t\t 2. Update your ToDo List. \n");
     printf("\n\t\t\t\t\t\t 3. Create a new ToDo List. \n");
@@ -168,6 +179,8 @@ bool readCredentialsFromFile(long loginID, long Password)
 
 void login()
 {
+    sleep(5);
+    system("cls");
     struct Credentials user;
     printf("**************************************\n");
     printf("*                 Login              *\n");
