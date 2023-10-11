@@ -50,7 +50,7 @@ int main()
 void homePage()
 {
     system("cls");
-    system("color 12");
+    system("color 17");
     int choice;
     printf("\n  _____________________________________________________________________\n");
     printf("||                                                                     ||\n");
@@ -181,6 +181,7 @@ void login()
 {
     sleep(5);
     system("cls");
+    system("color E1");
     struct Credentials user;
     printf("**************************************\n");
     printf("*                 Login              *\n");
@@ -223,6 +224,13 @@ void createAccount()
     char name[20];
     int dob = 0;
     struct Credentials newUser;
+    sleep(3);
+    system("cls");
+    system("color 2f");
+    struct Credentials user;
+    printf("**************************************\n");
+    printf("*         CREATE AN ACCOUNT          *\n");
+    printf("**************************************\n");
     printf("To Create a New Account\n");
     printf("Enter your first name: ");
     scanf("%19s", name);
@@ -255,18 +263,22 @@ void createAccount()
 
 void guest()
 {
+    system("cls");
+    system("color 5a");
     printf("\nGuest Mode Loading.....\n");
-    sleep(3);
+    sleep(2);
     struct Credentials guestUser;
     guestUser.loginID = 12345;
     guestUser.Password = 12345;
     guestUser.verified = true;
     printf("\nGuest Mode READY.....\n");
-    sleep(3);
+    sleep(2);
         printf("**************************************\n");
         printf("*          WELCOME GUEST             *\n");
         printf("**************************************\n");
-    sleep(5);
+    sleep(3);
+    printf("Guiding you to Main Menu...");
+    sleep(3);
     int choice = mainMenu();
     taskManager(guestUser,choice);
 }
