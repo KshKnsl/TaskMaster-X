@@ -13,14 +13,33 @@ struct Credentials
     bool verified;
 };
 
+struct Task 
+{
+    int  taskID;
+    char taskname[20];
+    char description[500];
+    int  percent_complete;
+    bool completed;
+    int  priority;//set priority on a scale of 1-5    
+    int  lastDate;//last date to complete the task
+    int  time;//last time to complete the task
+    char attactment[100];//askuser if he wants to attach any link or file with his file(like meet,docs,excelsheet,URL address)
+    char category[20];
+};
+
 void escape();
 void login();
 void createAccount();
 void guest();
 void homePage();
-int mainMenu();
-void taskMenu();
+int  mainMenu();
 bool validate(int dob);
+void taskManager(struct Credentials user,int choice);
+void seeToDoList(struct Credentials user);
+void updateToDoList(struct Credentials user);
+void createNewToDoList(struct Credentials user);
+void deleteToDoList(struct Credentials user);
+void editTasks(struct Credentials user);
 
 int main()
 {
@@ -165,7 +184,7 @@ void login()
         printf("\nMAIN MENU Loading.....\n");
         sleep(5);
         int choice = mainMenu();
-        // Handle the choice based on user's input from the main menu
+        taskManager(user,choice);
     }
     else
     {
@@ -234,8 +253,9 @@ void guest()
         printf("**************************************\n");
         printf("*          WELCOME GUEST             *\n");
         printf("**************************************\n");
+    sleep(5);
     int choice = mainMenu();
-    // Handle the choice based on user's input from main menu
+    taskManager(guestUser,choice);
 }
 
 bool validate(int dob)
@@ -252,4 +272,60 @@ bool validate(int dob)
         return false;
     }
     return true;
+}
+
+void taskManager(struct Credentials user,int choice)
+{
+    retry:
+    switch(choice) 
+    {
+        case 1:
+            seeToDoList(user);
+            break;
+        case 2:
+            updateToDoList(user);
+            break;
+        case 3:
+            createNewToDoList(user);
+            break;
+        case 4:
+            deleteToDoList(user);
+            break;
+        case 5:
+            editTasks(user);
+            break;
+        case 6:
+            escape();
+        default:
+            printf("Invalid choice. Please choose a valid option.\n");
+            sleep(5);
+            choice=mainMenu();
+            goto retry;
+    }
+}
+
+void seeToDoList(struct Credentials user)
+{
+    // Implement code to display the user's ToDo List
+    // You can read tasks associated with the loginID.txt from a file and display them.
+}
+
+void updateToDoList(struct Credentials user)
+{
+    // Implement code to update the user's ToDo List with %completion of tasks and the completed tasks
+}
+
+void createNewToDoList(struct Credentials user)
+{
+    // Implement code to create a new ToDo List for the user
+}
+
+void deleteToDoList(struct Credentials user)
+{
+    // Implement code to delete the user's ToDo List
+}
+
+void editTasks(struct Credentials user)
+{
+    // Implement code to edit tasks in the user's ToDo List
 }
