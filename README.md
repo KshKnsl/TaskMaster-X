@@ -15,26 +15,26 @@ TaskMaster X is a simple text-based user authentication and task management syst
 1. Clone the repository to your local machine:
 
    ```bash
-   git clone https://github.com/your-username/taskmaster-x.git
+   git clone https://github.com/KushKansal/taskmaster-x.git
    ```
 
 2. **Compile the C code:**
 
    ```bash
-   gcc taskmaster-x.c -o taskmaster-x
+   gcc taskmaster.c -o taskmaster
    ```
 
 3. Run the program:
 
    ```bash
-   ./taskmaster-x
+   ./taskmaster
    ```
 
 4. Follow the on-screen instructions to log in, create an account, or use the guest mode.
 
 ## File Structure
 
-- `taskmaster-x.c`: The main C source code file containing the program logic.
+- `taskmaster.c`: The main C source code file containing the program logic.
 - `Credentials.txt`: The file where user credentials are stored (created when users create accounts).
 - `README.md`: This README file.
 
@@ -44,12 +44,10 @@ Contributions are welcome! If you find any issues or have suggestions for improv
 
 ## Author
 
-Your Name
+KUSH KANSAL
 - GitHub: [Your GitHub Profile](https://github.com/KushKansal)
 
 ## Acknowledgments
 
 Special thanks to anyone whose code or libraries were used in this project.
 ```
-
-Make sure to replace "your-username" with your actual GitHub username and "Your Name" with your name in the author section.
