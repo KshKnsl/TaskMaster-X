@@ -42,10 +42,14 @@ TaskMaster X is a simple text-based user authentication and task management syst
 
 Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a pull request.
 
-## Author
+## Authors
 
 KUSH KANSAL
-- GitHub: [Your GitHub Profile](https://github.com/KushKansal)
+- GitHub: [KUSH KANSAL](https://github.com/KushKansal)
+VASU TAYAL
+- GitHub: [VASU TAYAL](https://github.com/VasuTayal11)
+AADITYA PRATAP SINGN
+- GitHub: [AADITYA PRATAP SINGN](https://github.com/aaditwocode)
 
 ## Acknowledgments
 
