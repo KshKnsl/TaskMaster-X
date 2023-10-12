@@ -179,7 +179,7 @@ bool readCredentialsFromFile(long loginID, long Password)
 
 void login()
 {
-    sleep(5);
+    sleep(3);
     system("cls");
     system("color E1");
     struct Credentials user;
@@ -257,7 +257,6 @@ void createAccount()
     printf("\nAccount created successfully!\n");
     printf("Now you will be guided to the login page.\nEnter your credentials there to log in\n");
     sleep(3);
-    system("cls");
     login();
 }
 
