@@ -247,8 +247,19 @@ void createAccount()
     {
         printf("------Date Validated------- \n");
     }
-    printf("\nEnter a new Login ID: ");
-    scanf("%ld", &newUser.loginID);
+    long newLoginID;
+    while(1) 
+    {
+        printf("Enter a new Login ID: ");
+        scanf("%ld", &newLoginID);
+        if(loginIDExists(newLoginID))
+            printf("Login ID already exists. Please choose a different one.\n");
+        else
+        {
+            newUser.loginID = newLoginID;
+            break;
+        }
+    }
     printf("Enter a new Password: ");
     scanf("%ld", &newUser.Password);
     newUser.verified = true;
@@ -296,6 +307,25 @@ bool validate(int dob)
         return false;
     }
     return true;
+}
+
+bool loginIDExists(long loginID) 
+{
+    FILE *file = fopen("Credentials.txt","r");
+    long storedLoginID, storedPassword;
+    bool found=false;
+    char line[100];   
+    while(fgets(line,sizeof(line),file)!=NULL) 
+    {
+        sscanf(line,"%ld,%ld",&storedLoginID,&storedPassword);    
+        if(loginID==storedLoginID) 
+        {
+            found = true;
+            break;
+        }
+    }
+    fclose(file);
+    return found;
 }
 
 void taskManager(struct Credentials user,int choice)
