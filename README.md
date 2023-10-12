@@ -44,11 +44,8 @@ Contributions are welcome! If you find any issues or have suggestions for improv
 
 ## Authors
 
-KUSH KANSAL
 - GitHub: [KUSH KANSAL](https://github.com/KushKansal)
-VASU TAYAL
 - GitHub: [VASU TAYAL](https://github.com/VasuTayal11)
-AADITYA PRATAP SINGN
 - GitHub: [AADITYA PRATAP SINGN](https://github.com/aaditwocode)
 
 ## Acknowledgments
