@@ -34,6 +34,7 @@ void guest();
 void homePage();
 int  mainMenu();
 bool validate(int dob);
+bool loginIDExists(long loginID) ;
 void taskManager(struct Credentials user,int choice);
 void seeToDoList(struct Credentials user);
 void updateToDoList(struct Credentials user);
@@ -263,7 +264,6 @@ void createAccount()
     printf("Enter a new Password: ");
     scanf("%ld", &newUser.Password);
     newUser.verified = true;
-    // Write the new user's credentials to the file
     writeCredentialsToFile(newUser.loginID, newUser.Password);
     printf("\nAccount created successfully!\n");
     printf("Now you will be guided to the login page.\nEnter your credentials there to log in\n");
