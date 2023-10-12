@@ -15,7 +15,7 @@ TaskMaster X is a simple text-based user authentication and task management syst
 1. Clone the repository to your local machine:
 
    ```bash
-   git clone https://github.com/KushKansal/taskmaster-x.git
+      https://github.com/KushKansal/TaskMaster-X.git
    ```
 
 2. **Compile the C code:**
