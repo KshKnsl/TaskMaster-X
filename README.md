@@ -1,6 +1,5 @@
 
-```markdown
-TaskMaster X
+# TaskMaster X
 
 TaskMaster X is a simple text-based user authentication and task management system implemented in C. Users can log in with their credentials, create new accounts, or use a guest mode. After logging in, users can access a menu to manage their tasks.
 
