@@ -22,13 +22,13 @@ TaskMaster X is a simple text-based user authentication and task management syst
 2. **Compile the C code:**
 
    ```bash
-   gcc taskmaster.c -o taskmaster
+      gcc taskmaster.c -o taskmaster
    ```
 
 3. Run the program:
 
    ```bash
-   ./taskmaster
+      ./taskmaster
    ```
 
 4. Follow the on-screen instructions to log in, create an account, or use the guest mode.
@@ -50,5 +50,4 @@ Contributions are welcome! If you find any issues or have suggestions for improv
 - GitHub: [AADITYA PRATAP SINGN](https://github.com/aaditwocode)
 
 ## Acknowledgments
-
 Special thanks to anyone whose code or libraries were used in this project.
