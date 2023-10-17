@@ -52,4 +52,3 @@ Contributions are welcome! If you find any issues or have suggestions for improv
 ## Acknowledgments
 
 Special thanks to anyone whose code or libraries were used in this project.
-```
