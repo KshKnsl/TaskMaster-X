@@ -155,7 +155,7 @@ void writeCredentialsToFile(long loginID, long Password)
         printf("Error opening the file for writing.\n");
         return;
     }
-    fprintf(file,"%ld,%ld,%s\n",loginID,Password);
+    fprintf(file,"%ld,%ld\n",loginID,Password);
     fflush(file);
     fclose(file);
 }
