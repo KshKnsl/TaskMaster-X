@@ -11,8 +11,8 @@ struct Credentials
     long loginID;
     long Password;
     bool verified;
+    char name[50];
 };
-
 
 struct Task 
 {
@@ -42,6 +42,7 @@ void updateToDoList(struct Credentials user);
 void createNewToDoList(struct Credentials user);
 void deleteToDoList(struct Credentials user);
 void editTasks(struct Credentials user);
+bool validateName(char* name);
 
 int main()
 {
@@ -154,7 +155,7 @@ void writeCredentialsToFile(long loginID, long Password)
         printf("Error opening the file for writing.\n");
         return;
     }
-    fprintf(file,"%ld,%ld\n",loginID,Password);
+    fprintf(file,"%ld,%ld,%s\n",loginID,Password);
     fflush(file);
     fclose(file);
 }
@@ -223,7 +224,7 @@ void login()
 
 void createAccount()
 {
-    char name[20];
+    char name[50];
     int dob = 0;
     struct Credentials newUser;
     sleep(3);
@@ -234,20 +235,31 @@ void createAccount()
     printf("*         CREATE AN ACCOUNT          *\n");
     printf("**************************************\n");
     printf("To Create a New Account\n");
+    retry1:
     printf("Enter your first name: ");
-    scanf("%19s", name);
-    retry:
+    scanf("%49s", name);
+    if(validateName(name))
+    {
+         strcpy(newUser.name,name);
+         printf("----------Name Validated Successfully----------- \n");
+    }
+    else
+    {     
+        printf("\nInvalid Name. Please use only letters and spaces.Retry.....");
+        goto retry1;    
+    }
+    retry2:
     printf("Enter your date of birth (format DDMMYY): ");
     scanf("%d", &dob);
 
     if(!validate(dob))
     {
         printf("\nWrong Date of birth......Retry.....");
-        goto retry;
+        goto retry2;
     }
     else
     {
-        printf("------Date Validated------- \n");
+        printf("-----------Date Validated Successfully------------ \n");
     }
     long newLoginID;
     while(1) 
@@ -306,6 +318,20 @@ bool validate(int dob)
     if((month==2&&day>29)||((month==4||month==6||month==9||month==11)&&day>30))
     {
         return false;
+    }
+    return true;
+}
+
+bool validateName(char* name)
+{
+    int i;
+    if(name[0]=='\0')
+        return false;
+    for(i=0;name[i]!='\0';i++) 
+    {
+        char ch=name[i];
+        if(!((ch>='A'&&ch<='Z')||(ch>='a'&&ch<='z')||ch==' '))
+            return false;
     }
     return true;
 }
