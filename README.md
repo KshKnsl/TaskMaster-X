@@ -47,7 +47,7 @@ Contributions are welcome! If you find any issues or have suggestions for improv
 
 - GitHub: [KUSH KANSAL](https://github.com/KushKansal)
 - GitHub: [VASU TAYAL](https://github.com/VasuTayal11)
-- GitHub: [AADITYA PRATAP SINGN](https://github.com/aaditwocode)
+- GitHub: [AADITYA PRATAP SINGH](https://github.com/aaditwocode)
 
 ## Acknowledgments
 Special thanks to anyone whose code or libraries were used in this project.
