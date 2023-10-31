@@ -390,21 +390,26 @@ void taskManager(struct Credentials user,int choice)
 void seeToDoList(struct Credentials user) 
 {
     addTask(user);
-    char fileName[20];
-    sprintf(fileName,"%ld.txt",user.loginID); // Generate the file's name based on the user's loginID
+    char filename[20];
+    sprintf(filename,"%ld.txt",user.loginID); // Generate the file's name based on the user's loginID
     system("cls");
     printf("*********************************************************************************************\n");
     printf("*   Task ID   |   Task Name   |   % Complete   |   Priority   |   Due Date   |   Due Time   *\n");
     printf("*********************************************************************************************\n");
     
-    FILE *file = fopen(fileName, "r");
+    FILE *file = fopen(filename, "r");
     if(file==NULL) 
     {
         printf("Your ToDo List is empty.\n");
     } 
     else 
     {
-        //read details
+       char task[1000];
+       printf("Tasks present in the Taskmaster:\n");
+       while(fscanf(file,"%s",task)!=EOF)
+       {
+        printf("%s\n", task);
+       }
         fclose(file);
     }
 
@@ -418,6 +423,25 @@ void addTask(struct Credentials user) {
     printf("*                      Add New Task                                *\n");
     printf("********************************************************************\n");
     //.......
+    char fileName[50];
+    
+    printf("Enter the filename (without extension): ");
+    scanf("%s", fileName);
+    strcat(fileName, ".txt"); // Adding the file extension
+
+    FILE *file = fopen(fileName, "a"); // Open file in append mode
+    if (file == NULL) {
+        printf("Error opening file.\n");
+        return;
+    }
+
+    char taskName[100];
+    printf("Enter task name: ");
+    scanf("%s", taskName);
+
+    fprintf(file, "%s\n", taskName); // Append task to the file
+    fclose(file);
+
 }
 
 
