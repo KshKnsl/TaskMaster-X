@@ -322,6 +322,7 @@ bool validate(int dob)
     return true;
 }
 
+
 bool validateName(char* name)
 {
     int i;
