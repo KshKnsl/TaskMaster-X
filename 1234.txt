@@ -1,3 +1,0 @@
-Eat 
-Sleep
-Repeat

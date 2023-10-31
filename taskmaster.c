@@ -43,6 +43,7 @@ void createNewToDoList(struct Credentials user);
 void deleteToDoList(struct Credentials user);
 void editTasks(struct Credentials user);
 bool validateName(char* name);
+void addTask(struct Credentials user);
 
 int main()
 {
@@ -108,7 +109,7 @@ void escape()
     printf("\n||     ||     |     | /      \\ |   \\ | |\\           |    |     | |    |   ||");
     printf("\n||     ||     |     |/        \\|    \\| | \\          |    |=====| |====|   ||");
     printf("\n||________________________________________________________________________||\n");
-    sleep(7);
+    sleep(3);
     system("cls");
     exit(0);
   }
@@ -279,7 +280,7 @@ void createAccount()
     newUser.verified = true;
     writeCredentialsToFile(newUser.loginID, newUser.Password);
     printf("\nAccount created successfully!\n");
-    printf("Now you will be guided to the login page.\nEnter your credentials there to log in\n");
+    printf("Now you will be guided to the login page.\nEnter your credentials there in order to LOGIN\n");
     sleep(3);
     login();
 }
@@ -385,11 +386,39 @@ void taskManager(struct Credentials user,int choice)
     }
 }
 
-void seeToDoList(struct Credentials user)
+void seeToDoList(struct Credentials user) 
 {
-    // Implement code to display the user's ToDo List
-    // You can read tasks associated with the loginID.txt from a file and display them.
+    addTask(user);
+    char fileName[20];
+    sprintf(fileName,"%ld.txt",user.loginID); // Generate the file's name based on the user's loginID
+    system("cls");
+    printf("*********************************************************************************************\n");
+    printf("*   Task ID   |   Task Name   |   % Complete   |   Priority   |   Due Date   |   Due Time   *\n");
+    printf("*********************************************************************************************\n");
+    
+    FILE *file = fopen(fileName, "r");
+    if(file==NULL) 
+    {
+        printf("Your ToDo List is empty.\n");
+    } 
+    else 
+    {
+        //read details
+        fclose(file);
+    }
+
+    //...............
 }
+
+void addTask(struct Credentials user) {
+    
+    system("cls");
+    printf("********************************************************************\n");
+    printf("*                      Add New Task                                *\n");
+    printf("********************************************************************\n");
+    //.......
+}
+
 
 void updateToDoList(struct Credentials user)
 {
