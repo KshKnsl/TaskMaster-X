@@ -109,7 +109,7 @@ void escape()
     printf("\n||________________________________________________________________________||\n");
     sleep(2);
     system("cls");
-    int choice;
+    int choice=1;
     printf("Would you like to provide feedback? (1: Yes, 2: No): ");
     scanf("%d",&choice);
     if(choice==1) 
@@ -125,7 +125,7 @@ void escape()
         printf("Thank you for your feedback! It has been saved in feedback.txt.\n");
     }
 
-    printf("Goodbye! Have a great day!\n");
+    printf("\nGoodbye! Have a great day!\n");
     sleep(1);
     exit(0);
   }
