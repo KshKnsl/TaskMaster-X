@@ -14,17 +14,15 @@ struct Credentials
     char name[50];
 };
 
-struct Task 
+struct Task
 {
-    int  taskID;
     char taskname[20];
     char description[500];
     int  percent_complete;
     bool completed;
-    int  priority;//set priority on a scale of 1-5    
+    int  priority;//set priority on a scale of 1-5
     int  lastDate;//last date to complete the task
     int  time;//last time to complete the task
-    char attactment[100];//askuser if he wants to attach any link or file with his file(like meet,docs,excelsheet,URL address)
     char category[20];
 };
 
@@ -123,10 +121,10 @@ int mainMenu()
 {
     //This function is used to print the Menu of the Todo list and returns a choice entered by the user.
     int choice;
-    
+
     system("cls");          //clears the screen.
     system("color 4F");
-    
+
     printf("\n");
 
     printf("\t\t\t\t\t**************************************\n");
@@ -134,7 +132,7 @@ int mainMenu()
     printf("\t\t\t\t\t***            MAIN MENU           ***\n");
     printf("\t\t\t\t\t***                                ***\n");
     printf("\t\t\t\t\t**************************************\n");
-    
+
     printf("\nEnter your choice : ");
     printf("\n\t\t\t\t\t\t 1. See your ToDo List. \n");
     printf("\n\t\t\t\t\t\t 2. Add tasks to your ToDo List. \n");
@@ -245,9 +243,9 @@ void createAccount()
          printf("----------Name Validated Successfully----------- \n");
     }
     else
-    {     
+    {
         printf("\nInvalid Name. Please use only letters and spaces.Retry.....");
-        goto retry1;    
+        goto retry1;
     }
     retry2:
     printf("Enter your date of birth (format DDMMYY): ");
@@ -263,7 +261,7 @@ void createAccount()
         printf("-----------Date Validated Successfully------------ \n");
     }
     long newLoginID;
-    while(1) 
+    while(1)
     {
         printf("Enter a new Login ID: ");
         scanf("%ld", &newLoginID);
@@ -329,7 +327,7 @@ bool validateName(char* name)
     int i;
     if(name[0]=='\0')
         return false;
-    for(i=0;name[i]!='\0';i++) 
+    for(i=0;name[i]!='\0';i++)
     {
         char ch=name[i];
         if(!((ch>='A'&&ch<='Z')||(ch>='a'&&ch<='z')||ch==' '))
@@ -338,16 +336,16 @@ bool validateName(char* name)
     return true;
 }
 
-bool loginIDExists(long loginID) 
+bool loginIDExists(long loginID)
 {
     FILE *file = fopen("Credentials.txt","r");
     long storedLoginID, storedPassword;
     bool found=false;
-    char line[100];   
-    while(fgets(line,sizeof(line),file)!=NULL) 
+    char line[100];
+    while(fgets(line,sizeof(line),file)!=NULL)
     {
-        sscanf(line,"%ld,%ld",&storedLoginID,&storedPassword);    
-        if(loginID==storedLoginID) 
+        sscanf(line,"%ld,%ld",&storedLoginID,&storedPassword);
+        if(loginID==storedLoginID)
         {
             found = true;
             break;
@@ -363,7 +361,7 @@ void taskManager(struct Credentials user,int choice)
     do
     {
         retry:
-        switch(choice) 
+        switch(choice)
         {
             case 1:
                 seeToDoList(user);
@@ -398,58 +396,85 @@ void taskManager(struct Credentials user,int choice)
 void seeToDoList(struct Credentials user) 
 {
     char filename[20];
-    sprintf(filename,"%ld.txt",user.loginID); // Generate the file's name based on the user's loginID
+    sprintf(filename, "%ld.txt", user.loginID); // Generate the file's name based on the user's loginID
     system("cls");
-    
+
     FILE *file = fopen(filename, "r");
-    if(file==NULL) 
-    {
+    if (file == NULL) {
         printf("Your ToDo List is empty.\n");
-    } 
-    else 
-    {
-       printf("Tasks present in the Taskmaster:\n");
-       printf("*********************************************************************************************\n");
-       printf("*   Task ID   |   Task Name   |   % Complete   |   Priority   |   Due Date   |   Due Time   *\n");
-       printf("*********************************************************************************************\n");
-    
-       char task[1000];
-       while(fscanf(file,"%s",task)!=EOF)
-       {
-        printf("%s\n", task);
-       }
+    } else {
+        int serial = 1; // Initialize the serial number
+
+        printf("**********************************************************************************************************************************************\n");
+        printf("*   Serial No |   Task Name                  |   %% Complete  |   Completed  |   Priority   |   Due Date  |  Due Time  |    Category          *\n");
+        printf("**********************************************************************************************************************************************\n");
+
+        struct Task task;
+        char line[1000]; // A buffer to read lines from the file
+
+        while (fgets(line, sizeof(line), file) != NULL) {
+            if (sscanf(line, "Task Name: %19s", task.taskname) == 1) {
+                // Successfully read the task name, now process the rest of the data
+                fgets(line, sizeof(line), file); // Read the description line
+                sscanf(line, "Description: %499[^\n]", task.description); // Read the description
+
+                fgets(line, sizeof(line), file); // Read the next line
+                sscanf(line, "Completion Percentage: %d", &task.percent_complete);
+
+                fgets(line, sizeof(line), file);
+                sscanf(line, "Completed: %d", &task.completed);
+
+                fgets(line, sizeof(line), file);
+                sscanf(line, "Priority: %d", &task.priority);
+
+                fgets(line, sizeof(line), file);
+                sscanf(line, "Last Date: %d", &task.lastDate);
+
+                fgets(line, sizeof(line), file);
+                sscanf(line, "Last Time: %d", &task.time);
+
+                fgets(line, sizeof(line), file);
+                sscanf(line, "Category: %19s", task.category);
+
+                printf("* %10d  | %-28s | %11d%%  | %-11s  | %11d  | %10d  | %9d  | %-20s *\n",
+                       serial, task.taskname, task.percent_complete, task.completed ? "Yes" : "No",
+                       task.priority, task.lastDate, task.time, task.category);
+                printf("**********************************************************************************************************************************************\n");
+
+                serial++; // Increment the serial number
+            }
+        }
         fclose(file);
     }
 }
 
-void addTask(struct Credentials user) {
-    
+void addTask(struct Credentials user) 
+{
     system("cls");
     printf("********************************************************************\n");
     printf("*                      Add New Task                                *\n");
     printf("********************************************************************\n");
-    
+
     char fileName[50];
-    sprintf(fileName,"%ld.txt",user.loginID); // Generate the file's name based on the user's loginID
-    
+    sprintf(fileName, "%ld.txt", user.loginID); // Generate the file's name based on the user's loginID
+
     FILE *file = fopen(fileName, "a"); // Open file in append mode
-    if (file==NULL) 
-    {
+    if (file == NULL) {
         printf("Error opening file.\n");
         return;
     }
-    struct Task newTask;
-    printf("Enter task name (up to 20 characters): ");
-    scanf("%s",newTask.taskname);
 
-    printf("Enter task description (up to 500 characters): ");
-    scanf(" %[^\n]",newTask.description);
+    struct Task newTask;
+    printf("Enter task name (up to 19 characters): ");
+    scanf("%19s", newTask.taskname);
+
+    printf("Enter task description (up to 499 characters): ");
+    scanf(" %[^\n]", newTask.description);
 
     printf("Enter task completion percentage: ");
     scanf("%d", &newTask.percent_complete);
 
-    //'completed' should be initially set to false
-    newTask.completed = false;
+    newTask.completed = false; // Initialize to false
 
     printf("Enter task priority (1-5): ");
     scanf("%d", &newTask.priority);
@@ -460,28 +485,20 @@ void addTask(struct Credentials user) {
     printf("Enter last time to complete the task: ");
     scanf("%d", &newTask.time);
 
-    printf("Enter task category (up to 20 characters): ");
-    scanf("%s", newTask.category);
+    printf("Enter task category (up to 19 characters): ");
+    scanf("%19s", newTask.category);
 
-    printf("Do you have any attachment to be stored ?(yes/no)");
-    char ch;
-    scanf("%c",&ch);
-    scanf("%c",&ch);
-    
-    if(ch=='Y'||ch=='y')
-    {
-        printf("Enter any attachment (up to 100 characters): ");
-        scanf(" %[^\n]", newTask.attactment);
-    }
-    else 
-    {
-        newTask.attactment[0] = '\0'; // Empty string if no attachment
-    }
-
-     fprintf(file, "%s_%s_%d_%d_%d_%d_%s_%s\n", newTask.taskname, newTask.description, newTask.percent_complete, newTask.completed,
-        newTask.priority, newTask.lastDate, newTask.time, newTask.category, newTask.attactment);
-
+    fprintf(file, "Task Name: %s\n", newTask.taskname);
+    fprintf(file, "Description: %s\n", newTask.description);
+    fprintf(file, "Completion Percentage: %d\n", newTask.percent_complete);
+    fprintf(file, "Completed: %d\n", newTask.completed);
+    fprintf(file, "Priority: %d\n", newTask.priority);
+    fprintf(file, "Last Date: %d\n", newTask.lastDate);
+    fprintf(file, "Last Time: %d\n", newTask.time);
+    fprintf(file, "Category: %s\n", newTask.category);
+    fprintf(file, "\n");
     fclose(file);
+    printf("Task added successfully.\n");
 }
 
 void updateToDoList(struct Credentials user)
