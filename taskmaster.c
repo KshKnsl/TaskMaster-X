@@ -460,6 +460,9 @@ void addTask(struct Credentials user) {
     printf("Enter last time to complete the task: ");
     scanf("%d", &newTask.time);
 
+    printf("Enter task category (up to 20 characters): ");
+    scanf("%s", newTask.category);
+
     printf("Do you have any attachment to be stored ?(yes/no)");
     char ch;
     scanf("%c",&ch);
@@ -475,11 +478,8 @@ void addTask(struct Credentials user) {
         newTask.attactment[0] = '\0'; // Empty string if no attachment
     }
 
-    printf("Enter task category (up to 20 characters): ");
-    scanf("%s", newTask.category);
-
      fprintf(file, "%s_%s_%d_%d_%d_%d_%s_%s\n", newTask.taskname, newTask.description, newTask.percent_complete, newTask.completed,
-        newTask.priority, newTask.lastDate, newTask.time, newTask.attactment, newTask.category);
+        newTask.priority, newTask.lastDate, newTask.time, newTask.category, newTask.attactment);
 
     fclose(file);
 }
