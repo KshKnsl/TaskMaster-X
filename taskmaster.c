@@ -137,7 +137,7 @@ int mainMenu()
     
     printf("\nEnter your choice : ");
     printf("\n\t\t\t\t\t\t 1. See your ToDo List. \n");
-    printf("\n\t\t\t\t\t\t 2. Update your ToDo List. \n");
+    printf("\n\t\t\t\t\t\t 2. Add tasks to your ToDo List. \n");
     printf("\n\t\t\t\t\t\t 3. Create a new ToDo List. \n");
     printf("\n\t\t\t\t\t\t 4. Delete your ToDo List. \n");
     printf("\n\t\t\t\t\t\t 5. Edit task(s) in your ToDo List. \n");
@@ -359,43 +359,47 @@ bool loginIDExists(long loginID)
 
 void taskManager(struct Credentials user,int choice)
 {
-    retry:
-    switch(choice) 
+    bool continueTasks = false;
+    do
     {
-        case 1:
-            seeToDoList(user);
-            break;
-        case 2:
-            updateToDoList(user);
-            break;
-        case 3:
-            createNewToDoList(user);
-            break;
-        case 4:
-            deleteToDoList(user);
-            break;
-        case 5:
-            editTasks(user);
-            break;
-        case 6:
-            escape();
-        default:
-            printf("Invalid choice. Please choose a valid option.\n");
-            sleep(5);
-            choice=mainMenu();
-            goto retry;
-    }
+        retry:
+        switch(choice) 
+        {
+            case 1:
+                seeToDoList(user);
+                break;
+            case 2:
+                addTask(user);
+                break;
+            case 3:
+                createNewToDoList(user);
+                break;
+            case 4:
+                deleteToDoList(user);
+                break;
+            case 5:
+                editTasks(user);
+                break;
+            case 6:
+                escape();
+            default:
+                printf("Invalid choice. Please choose a valid option.\n");
+                sleep(5);
+                choice=mainMenu();
+                goto retry;
+        }
+        printf("If you want to continue with the same operation press 1.\n");
+        printf("If you want to return to MAIN MENU press 0.");
+        scanf("%d", &continueTasks);
+    }while(continueTasks);
+    taskManager(user,mainMenu());
 }
 
 void seeToDoList(struct Credentials user) 
 {
-    addTask(user);
     char filename[20];
     sprintf(filename,"%ld.txt",user.loginID); // Generate the file's name based on the user's loginID
     system("cls");
-    printf("*********************************************************************************************\n");
-    printf("*   Task ID   |   Task Name   |   % Complete   |   Priority   |   Due Date   |   Due Time   *\n");
-    printf("*********************************************************************************************\n");
     
     FILE *file = fopen(filename, "r");
     if(file==NULL) 
@@ -404,16 +408,18 @@ void seeToDoList(struct Credentials user)
     } 
     else 
     {
-       char task[1000];
        printf("Tasks present in the Taskmaster:\n");
+       printf("*********************************************************************************************\n");
+       printf("*   Task ID   |   Task Name   |   % Complete   |   Priority   |   Due Date   |   Due Time   *\n");
+       printf("*********************************************************************************************\n");
+    
+       char task[1000];
        while(fscanf(file,"%s",task)!=EOF)
        {
         printf("%s\n", task);
        }
         fclose(file);
     }
-
-    //...............
 }
 
 void addTask(struct Credentials user) {
@@ -422,28 +428,61 @@ void addTask(struct Credentials user) {
     printf("********************************************************************\n");
     printf("*                      Add New Task                                *\n");
     printf("********************************************************************\n");
-    //.......
-    char fileName[50];
     
-    printf("Enter the filename (without extension): ");
-    scanf("%s", fileName);
-    strcat(fileName, ".txt"); // Adding the file extension
-
+    char fileName[50];
+    sprintf(fileName,"%ld.txt",user.loginID); // Generate the file's name based on the user's loginID
+    
     FILE *file = fopen(fileName, "a"); // Open file in append mode
-    if (file == NULL) {
+    if (file==NULL) 
+    {
         printf("Error opening file.\n");
         return;
     }
+    struct Task newTask;
+    printf("Enter task name (up to 20 characters): ");
+    scanf("%s",newTask.taskname);
 
-    char taskName[100];
-    printf("Enter task name: ");
-    scanf("%s", taskName);
+    printf("Enter task description (up to 500 characters): ");
+    scanf(" %[^\n]",newTask.description);
 
-    fprintf(file, "%s\n", taskName); // Append task to the file
+    printf("Enter task completion percentage: ");
+    scanf("%d", &newTask.percent_complete);
+
+    //'completed' should be initially set to false
+    newTask.completed = false;
+
+    printf("Enter task priority (1-5): ");
+    scanf("%d", &newTask.priority);
+
+    printf("Enter last date to complete the task: ");
+    scanf("%d", &newTask.lastDate);
+
+    printf("Enter last time to complete the task: ");
+    scanf("%d", &newTask.time);
+
+    printf("Do you have any attachment to be stored ?(yes/no)");
+    char ch;
+    scanf("%c",&ch);
+    scanf("%c",&ch);
+    
+    if(ch=='Y'||ch=='y')
+    {
+        printf("Enter any attachment (up to 100 characters): ");
+        scanf(" %[^\n]", newTask.attactment);
+    }
+    else 
+    {
+        newTask.attactment[0] = '\0'; // Empty string if no attachment
+    }
+
+    printf("Enter task category (up to 20 characters): ");
+    scanf("%s", newTask.category);
+
+     fprintf(file, "%s_%s_%d_%d_%d_%d_%s_%s\n", newTask.taskname, newTask.description, newTask.percent_complete, newTask.completed,
+        newTask.priority, newTask.lastDate, newTask.time, newTask.attactment, newTask.category);
+
     fclose(file);
-
 }
-
 
 void updateToDoList(struct Credentials user)
 {
