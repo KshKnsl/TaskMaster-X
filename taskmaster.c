@@ -107,8 +107,26 @@ void escape()
     printf("\n||     ||     |     | /      \\ |   \\ | |\\           |    |     | |    |   ||");
     printf("\n||     ||     |     |/        \\|    \\| | \\          |    |=====| |====|   ||");
     printf("\n||________________________________________________________________________||\n");
-    sleep(3);
+    sleep(2);
     system("cls");
+    int choice;
+    printf("Would you like to provide feedback? (1: Yes, 2: No): ");
+    scanf("%d",&choice);
+    if(choice==1) 
+    {
+        // Feedback form
+        char feedback[1000];
+        printf("Please provide your feedback (up to 999 characters):\n");
+        scanf(" %[^\n]", feedback);
+        // Save the feedback to a file
+        FILE *feedbackFile = fopen("feedback.txt", "a");
+        fprintf(feedbackFile, "%s\n", feedback);
+        fclose(feedbackFile);
+        printf("Thank you for your feedback! It has been saved in feedback.txt.\n");
+    }
+
+    printf("Goodbye! Have a great day!\n");
+    sleep(1);
     exit(0);
   }
   else
@@ -181,7 +199,7 @@ bool readCredentialsFromFile(long loginID, long Password)
 
 void login()
 {
-    sleep(3);
+    sleep(2);
     system("cls");
     system("color E1");
     struct Credentials user;
@@ -226,7 +244,7 @@ void createAccount()
     char name[50];
     int dob = 0;
     struct Credentials newUser;
-    sleep(3);
+    sleep(2);
     system("cls");
     system("color 2f");
     struct Credentials user;
@@ -279,7 +297,7 @@ void createAccount()
     writeCredentialsToFile(newUser.loginID, newUser.Password);
     printf("\nAccount created successfully!\n");
     printf("Now you will be guided to the login page.\nEnter your credentials there in order to LOGIN\n");
-    sleep(3);
+    sleep(2);
     login();
 }
 
@@ -288,19 +306,19 @@ void guest()
     system("cls");
     system("color 5a");
     printf("\nGuest Mode Loading.....\n");
-    sleep(2);
+    sleep(1);
     struct Credentials guestUser;
     guestUser.loginID = 12345;
     guestUser.Password = 12345;
     guestUser.verified = true;
     printf("\nGuest Mode READY.....\n");
-    sleep(2);
+    sleep(1);
         printf("**************************************\n");
         printf("*          WELCOME GUEST             *\n");
         printf("**************************************\n");
-    sleep(3);
+    sleep(1);
     printf("Guiding you to Main Menu...");
-    sleep(3);
+    sleep(2);
     int choice = mainMenu();
     taskManager(guestUser,choice);
 }
@@ -499,6 +517,7 @@ void addTask(struct Credentials user)
     fprintf(file, "\n");
     fclose(file);
     printf("Task added successfully.\n");
+    sleep(2);
 }
 
 void updateToDoList(struct Credentials user)
