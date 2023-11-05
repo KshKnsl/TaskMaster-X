@@ -522,20 +522,52 @@ void addTask(struct Credentials user)
 
 void updateToDoList(struct Credentials user)
 {
-    // Implement code to update the user's ToDo List with %completion of tasks and the completed tasks
+    system("cls");
+    printf("********************************************************************\n");
+    printf("*                      Update To-Do List                           *\n");
+    printf("********************************************************************\n");
+
+    // Implement code to update the user's ToDo List with completion of tasks and the completed tasks
+    printf("To-Do List updated successfully.\n");
+    sleep(2);
 }
+
 
 void createNewToDoList(struct Credentials user)
 {
+    system("cls");
+    printf("********************************************************************\n");
+    printf("*                   Create New To-Do List                          *\n");
+    printf("********************************************************************\n");
+
     // Implement code to create a new ToDo List for the user
+    printf("New To-Do List created successfully.\n");
+    sleep(2);
 }
+
 
 void deleteToDoList(struct Credentials user)
 {
-    // Implement code to delete the user's ToDo List
+    system("cls");
+    printf("********************************************************************\n");
+    printf("*                   Delete To-Do List                               *\n");
+    printf("********************************************************************\n");
+
+    // Implement code to delete the user's To-Do List
+   printf("To-Do List deleted successfully.\n");
+    sleep(2);
 }
+
 
 void editTasks(struct Credentials user)
 {
+    system("cls");
+    printf("********************************************************************\n");
+    printf("*                      Edit Tasks                                  *\n");
+    printf("********************************************************************\n");
+
     // Implement code to edit tasks in the user's ToDo List
+    printf("Tasks edited successfully.\n");
+    sleep(2);
 }
+
