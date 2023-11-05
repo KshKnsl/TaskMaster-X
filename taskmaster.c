@@ -388,16 +388,19 @@ void taskManager(struct Credentials user,int choice)
             case 2:
                 addTask(user);
                 break;
-            case 3:
-                createNewToDoList(user);
+             case 3:
+                updateToDoList(user);
                 break;
             case 4:
-                deleteToDoList(user);
+                createNewToDoList(user);
                 break;
             case 5:
-                editTasks(user);
+                deleteToDoList(user);
                 break;
             case 6:
+                editTasks(user);
+                break;
+            case 7:
                 escape();
             default:
                 printf("Invalid choice. Please choose a valid option.\n");
