@@ -154,6 +154,7 @@ int mainMenu()
     printf("\nEnter your choice : ");
     printf("\n\t\t\t\t\t\t 1. See your ToDo List. \n");
     printf("\n\t\t\t\t\t\t 2. Add tasks to your ToDo List. \n");
+    printf("\n\t\t\t\t\t\t 3. update the ToDo List. \n");
     printf("\n\t\t\t\t\t\t 3. Create a new ToDo List. \n");
     printf("\n\t\t\t\t\t\t 4. Delete your ToDo List. \n");
     printf("\n\t\t\t\t\t\t 5. Edit task(s) in your ToDo List. \n");
