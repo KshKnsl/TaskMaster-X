@@ -155,10 +155,10 @@ int mainMenu()
     printf("\n\t\t\t\t\t\t 1. See your ToDo List. \n");
     printf("\n\t\t\t\t\t\t 2. Add tasks to your ToDo List. \n");
     printf("\n\t\t\t\t\t\t 3. update the ToDo List. \n");
-    printf("\n\t\t\t\t\t\t 3. Create a new ToDo List. \n");
-    printf("\n\t\t\t\t\t\t 4. Delete your ToDo List. \n");
-    printf("\n\t\t\t\t\t\t 5. Edit task(s) in your ToDo List. \n");
-    printf("\n\t\t\t\t\t\t 6. Exit ");
+    printf("\n\t\t\t\t\t\t 4. Create a new ToDo List. \n");
+    printf("\n\t\t\t\t\t\t 5. Delete your ToDo List. \n");
+    printf("\n\t\t\t\t\t\t 6. Edit task(s) in your ToDo List. \n");
+    printf("\n\t\t\t\t\t\t 7. Exit ");
     printf("\n\n");
     printf("\n\t\t\t\t\t\t Enter your choice \n\t\t\t\t\t\t --> ");
     scanf("%d",&choice);
