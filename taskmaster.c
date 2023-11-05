@@ -527,7 +527,93 @@ void updateToDoList(struct Credentials user)
     printf("*                      Update To-Do List                           *\n");
     printf("********************************************************************\n");
 
-    // Implement code to update the user's ToDo List with completion of tasks and the completed tasks
+   char filename[20];
+    sprintf(filename, "%ld.txt", user.loginID); // Generate the file's name based on the user's loginID
+
+    FILE *file = fopen(filename, "r+");
+    if (file == NULL) {
+        printf("Error opening the file.\n");
+        return;
+    }
+
+    struct Task task;
+    int taskNumber = 0;
+    int taskChoice;
+    int found = 0;
+
+    printf("Your To-Do List:\n");
+
+    while (fscanf(file, "Task Name: %19s", task.taskname) == 1)
+     {
+        printf("%d. %s\n", taskNumber + 1, task.taskname);
+        fseek(file, strlen("Description: ") + 1, SEEK_CUR); // move file pointer to 'Description'
+        // Move the file pointer to the end of this task's details
+        for (int i = 0; i < 6; i++) 
+        {
+            char temp[100];
+            fgets(temp, sizeof(temp), file);
+        }
+
+        taskNumber++;
+    }
+
+    printf("Enter the task number you want to update (0 to exit): ");
+    scanf("%d", &taskChoice);
+
+    if (taskChoice == 0 || taskChoice > taskNumber) {
+        printf("No task selected or invalid task number.\n");
+        return;
+    }
+
+    rewind(file); // Reset the file pointer to the beginning
+
+    while (taskChoice > 0) {
+        if (fscanf(file, "Task Name: %19s", task.taskname) == 1) {
+            if (taskChoice == 1) {
+                // Found the selected task
+                found = 1;
+                break;
+            } else {
+                // Move the file pointer to the end of this task's details
+                for (int i = 0; i < 7; i++) {
+                    char temp[100];
+                    fgets(temp, sizeof(temp), file);
+                }
+            }
+            taskChoice--;
+        }
+    }
+
+    if (!found) {
+        printf("Task not found.\n");
+        fclose(file);
+        return;
+    }
+
+    // Update the task details
+    printf("Task Details:\n");
+    printf("Task Name: %s\n", task.taskname);
+    printf("Description: %s\n", task.description);
+    printf("Completion Percentage: %d%%\n", task.percent_complete);
+    printf("Completed: %s\n", task.completed ? "Yes" : "No");
+    printf("Priority: %d\n", task.priority);
+    printf("Last Date: %d\n", task.lastDate);
+    printf("Last Time: %d\n", task.time);
+    printf("Category: %s\n", task.category);
+
+    int newCompletion;
+    printf("Enter updated completion percentage: ");
+    scanf("%d", &newCompletion);
+
+    task.percent_complete = newCompletion;
+    fprintf(file, "Completion Percentage: %d\n", task.percent_complete);
+
+    int isCompleted;
+    printf("Is the task completed? (1 for Yes / 0 for No): ");
+    scanf("%d", &isCompleted);
+
+    task.completed = (isCompleted == 1) ? 1 : 0;
+    fprintf(file, "Completed: %d\n", task.completed);
     printf("To-Do List updated successfully.\n");
     sleep(2);
 }
