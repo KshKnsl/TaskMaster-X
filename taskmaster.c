@@ -35,9 +35,9 @@ int  mainMenu();
 bool validate(int dob);
 bool loginIDExists(long loginID) ;
 void taskManager(struct Credentials user,int choice);
-void seeToDoList(struct Credentials user);
+int  seeToDoList(struct Credentials user);
 void updateToDoList(struct Credentials user);
-void createNewToDoList(struct Credentials user);
+void filterToDoList(struct Credentials user);
 void deleteToDoList(struct Credentials user);
 void editTasks(struct Credentials user);
 bool validateName(char* name);
@@ -140,7 +140,7 @@ int mainMenu()
     //This function is used to print the Menu of the Todo list and returns a choice entered by the user.
     int choice;
 
-    system("cls");          //clears the screen.
+    system("cls");          
     system("color 4F");
 
     printf("\n");
@@ -154,9 +154,9 @@ int mainMenu()
     printf("\nEnter your choice : ");
     printf("\n\t\t\t\t\t\t 1. See your ToDo List. \n");
     printf("\n\t\t\t\t\t\t 2. Add tasks to your ToDo List. \n");
-    printf("\n\t\t\t\t\t\t 3. update the ToDo List. \n");
-    printf("\n\t\t\t\t\t\t 4. Create a new ToDo List. \n");
-    printf("\n\t\t\t\t\t\t 5. Delete your ToDo List. \n");
+    printf("\n\t\t\t\t\t\t 3. Update Completion status of the task in ToDo List. \n");
+    printf("\n\t\t\t\t\t\t 4. Filter tasks in ToDo List \n");
+    printf("\n\t\t\t\t\t\t 5. Delete a task in ToDo List. \n");
     printf("\n\t\t\t\t\t\t 6. Edit task(s) in your ToDo List. \n");
     printf("\n\t\t\t\t\t\t 7. Exit ");
     printf("\n\n");
@@ -392,7 +392,7 @@ void taskManager(struct Credentials user,int choice)
                 updateToDoList(user);
                 break;
             case 4:
-                createNewToDoList(user);
+                filterToDoList(user);
                 break;
             case 5:
                 deleteToDoList(user);
@@ -408,34 +408,46 @@ void taskManager(struct Credentials user,int choice)
                 choice=mainMenu();
                 goto retry;
         }
-        printf("If you want to continue with the same operation press 1.\n");
-        printf("If you want to return to MAIN MENU press 0.");
+    
+        printf("\n");
+        printf("\tPlease choose an option:\n");
+        printf("\t1. Continue with the same operation\n");
+        printf("\t0. Return to MAIN MENU\n");
+        printf("\tEnter your choice: ");
         scanf("%d", &continueTasks);
+
     }while(continueTasks);
+
     taskManager(user,mainMenu());
 }
 
-void seeToDoList(struct Credentials user) 
+int seeToDoList(struct Credentials user) 
 {
+    int serial=0;
     char filename[20];
     sprintf(filename, "%ld.txt", user.loginID); // Generate the file's name based on the user's loginID
     system("cls");
 
-    FILE *file = fopen(filename, "r");
-    if (file == NULL) {
+    FILE *file =fopen(filename,"r");
+    if(file==NULL) 
+    {
         printf("Your ToDo List is empty.\n");
-    } else {
-        int serial = 1; // Initialize the serial number
+    } 
+    else 
+    {
+        serial = 1;
 
         printf("**********************************************************************************************************************************************\n");
         printf("*   Serial No |   Task Name                  |   %% Complete  |   Completed  |   Priority   |   Due Date  |  Due Time  |    Category          *\n");
         printf("**********************************************************************************************************************************************\n");
 
         struct Task task;
-        char line[1000]; // A buffer to read lines from the file
+        char line[1000];
 
-        while (fgets(line, sizeof(line), file) != NULL) {
-            if (sscanf(line, "Task Name: %19s", task.taskname) == 1) {
+        while(fgets(line, sizeof(line), file) != NULL) 
+        {
+            if(sscanf(line, "Task Name: %19s", task.taskname) == 1) 
+            {
                 // Successfully read the task name, now process the rest of the data
                 fgets(line, sizeof(line), file); // Read the description line
                 sscanf(line, "Description: %499[^\n]", task.description); // Read the description
@@ -466,7 +478,9 @@ void seeToDoList(struct Credentials user)
                 serial++; // Increment the serial number
             }
         }
+
         fclose(file);
+        return serial;
     }
 }
 
@@ -481,7 +495,8 @@ void addTask(struct Credentials user)
     sprintf(fileName, "%ld.txt", user.loginID); // Generate the file's name based on the user's loginID
 
     FILE *file = fopen(fileName, "a"); // Open file in append mode
-    if (file == NULL) {
+    if(file==NULL) 
+    {
         printf("Error opening file.\n");
         return;
     }
@@ -531,110 +546,107 @@ void updateToDoList(struct Credentials user)
     printf("*                      Update To-Do List                           *\n");
     printf("********************************************************************\n");
 
-   char filename[20];
+    char filename[20];
     sprintf(filename, "%ld.txt", user.loginID); // Generate the file's name based on the user's loginID
 
-    FILE *file = fopen(filename, "r+");
-    if (file == NULL) {
-        printf("Error opening the file.\n");
-        return;
-    }
-
     struct Task task;
-    int taskNumber = 0;
+    int taskNumber = seeToDoList(user);
     int taskChoice;
     int found = 0;
-
-    printf("Your To-Do List:\n");
-
-    while (fscanf(file, "Task Name: %19s", task.taskname) == 1)
-     {
-        printf("%d. %s\n", taskNumber + 1, task.taskname);
-        fseek(file, strlen("Description: ") + 1, SEEK_CUR); // move file pointer to 'Description'
-        // Move the file pointer to the end of this task's details
-        for (int i = 0; i < 6; i++) 
-        {
-            char temp[100];
-            fgets(temp, sizeof(temp), file);
-        }
-
-        taskNumber++;
-    }
 
     printf("Enter the task number you want to update (0 to exit): ");
     scanf("%d", &taskChoice);
 
-    if (taskChoice == 0 || taskChoice > taskNumber) {
+    if (taskChoice <= 0 || taskChoice > taskNumber) 
+    {
         printf("No task selected or invalid task number.\n");
         return;
     }
+    FILE *file = fopen(filename, "r");
+    if (file == NULL) 
+    {
+        printf("Error opening the file.\n");
+        return;
+    }
 
-    rewind(file); // Reset the file pointer to the beginning
+    FILE *tempFile = fopen("temp.txt", "w");
+    if (tempFile == NULL) 
+    {
+        printf("Error creating the temporary file.\n");
+        fclose(file);
+        return;
+    }
 
-    while (taskChoice > 0) {
-        if (fscanf(file, "Task Name: %19s", task.taskname) == 1) {
-            if (taskChoice == 1) {
+    while (taskChoice > 0) 
+    {
+        if (fscanf(file, "Task Name: %19s", task.taskname) == 1) 
+        {
+            if (taskChoice == 1) 
+            {
                 // Found the selected task
                 found = 1;
-                break;
-            } else {
-                // Move the file pointer to the end of this task's details
-                for (int i = 0; i < 7; i++) {
+                // Update the task details
+                printf("Task Details:\n");
+                printf("Task Name: %s\n", task.taskname);
+                printf("Description: %s\n", task.description);
+                printf("Completion Percentage: %d%%\n", task.percent_complete);
+                printf("Completed: %s\n", task.completed ? "Yes" : "No");
+                printf("Priority: %d\n", task.priority);
+                printf("Last Date: %d\n", task.lastDate);
+                printf("Last Time: %d\n", task.time);
+                printf("Category: %s\n", task.category);
+
+                int newCompletion;
+                printf("Enter updated completion percentage: ");
+                scanf("%d", &newCompletion);
+                task.percent_complete = newCompletion;
+                fprintf(tempFile, "Completion Percentage: %d\n", task.percent_complete);
+
+                int isCompleted;
+                printf("Is the task completed? (1 for Yes / 0 for No): ");
+                scanf("%d", &isCompleted);
+                task.completed = (isCompleted == 1) ? 1 : 0;
+                fprintf(tempFile, "Completed: %d\n", task.completed);
+                printf("Task updated successfully.\n");
+                sleep(2);
+            } 
+            else 
+            {
+                // Copy the task details to the temporary file
+                fprintf(tempFile, "Task Name: %s\n", task.taskname);
+                fgets(task.description, sizeof(task.description), file);
+                fprintf(tempFile, "Description: %s", task.description);
+                for (int i = 0; i < 6; i++) 
+                {
                     char temp[100];
                     fgets(temp, sizeof(temp), file);
+                    fprintf(tempFile, "%s", temp);
                 }
             }
             taskChoice--;
         }
     }
 
-    if (!found) {
+    if (!found) 
+    {
         printf("Task not found.\n");
-        fclose(file);
-        return;
     }
 
-    // Update the task details
-    printf("Task Details:\n");
-    printf("Task Name: %s\n", task.taskname);
-    printf("Description: %s\n", task.description);
-    printf("Completion Percentage: %d%%\n", task.percent_complete);
-    printf("Completed: %s\n", task.completed ? "Yes" : "No");
-    printf("Priority: %d\n", task.priority);
-    printf("Last Date: %d\n", task.lastDate);
-    printf("Last Time: %d\n", task.time);
-    printf("Category: %s\n", task.category);
+    // Copy the rest of the tasks from the original file to the temporary file
+    char line[1000];
+    while (fgets(line, sizeof(line), file) != NULL) 
+    {
+        fprintf(tempFile, "%s", line);
+    }
 
-    int newCompletion;
-    printf("Enter updated completion percentage: ");
-    scanf("%d", &newCompletion);
+    // Close the files
+    fclose(file);
+    fclose(tempFile);
 
-    task.percent_complete = newCompletion;
-    fprintf(file, "Completion Percentage: %d\n", task.percent_complete);
-
-    int isCompleted;
-    printf("Is the task completed? (1 for Yes / 0 for No): ");
-    scanf("%d", &isCompleted);
-
-    task.completed = (isCompleted == 1) ? 1 : 0;
-    fprintf(file, "Completed: %d\n", task.completed);
-    printf("To-Do List updated successfully.\n");
-    sleep(2);
+    // Replace the original file with the temporary file
+    remove(filename); // Delete the original file
+    rename("temp.txt", filename); // Rename the temporary file
 }
-
-
-void createNewToDoList(struct Credentials user)
-{
-    system("cls");
-    printf("********************************************************************\n");
-    printf("*                   Create New To-Do List                          *\n");
-    printf("********************************************************************\n");
-
-    // Implement code to create a new ToDo List for the user
-    printf("New To-Do List created successfully.\n");
-    sleep(2);
-}
-
 
 void deleteToDoList(struct Credentials user)
 {
@@ -661,3 +673,9 @@ void editTasks(struct Credentials user)
     sleep(2);
 }
 
+
+void filterToDoList(struct Credentials user)
+{
+
+
+}
