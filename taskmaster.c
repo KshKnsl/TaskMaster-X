@@ -499,7 +499,10 @@ void addTask(struct Credentials user)
     {
         printf("Error opening file.\n");
         return;
-    }
+    }    
+
+
+    
 
     struct Task newTask;
     printf("Enter task name (up to 19 characters): ");
