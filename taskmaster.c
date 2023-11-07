@@ -675,16 +675,111 @@ void deleteToDoList(struct Credentials user)
     sleep(2);
 }
 
-
-void editTasks(struct Credentials user)
-{
+    void editTasks(struct Credentials user)
+ {
     system("cls");
     printf("********************************************************************\n");
     printf("*                      Edit Tasks                                  *\n");
     printf("********************************************************************\n");
 
-    // Implement code to edit tasks in the user's ToDo List
-    printf("Tasks edited successfully.\n");
+    char filename[20];
+    char response;
+    sprintf(filename, "%ld.txt", user.loginID);
+
+    FILE *file = fopen(filename, "r");
+    if (file == NULL) {
+        printf("Error opening the file.\n");
+        return;
+    }
+
+    FILE *edit = fopen("edit.txt", "w");
+    if (edit == NULL) {
+        printf("Error creating the editable file.\n");
+        fclose(file);
+        return;
+    }
+
+    char ch;
+    while ((ch = fgetc(file)) != EOF) {
+        fputc(ch, edit);
+    }
+
+    fclose(file);
+    fclose(edit);
+
+    printf("File contents copied successfully to edit.txt.\n");
+
+    printf("Do you want to edit the file? (y/n): ");
+    scanf(" %c", &response);
+
+    if (response == 'y' || response == 'Y') {
+        edit = fopen("edit.txt", "r+");
+
+        if (edit == NULL) {
+            printf("Error opening the destination file for editing.\n");
+            return;
+        }
+
+        int taskNumber = seeToDoList(user);
+        int taskChoice;
+
+        printf("Enter the task number you want to update (0 to exit): ");
+        scanf("%d", &taskChoice);
+
+        if (taskChoice <= 0 || taskChoice > taskNumber) {
+            printf("No task selected or invalid task number.\n");
+            fclose(edit);
+            return;
+        }
+
+        FILE *tempEdit = fopen("temp_edit.txt", "w");
+
+        if (tempEdit == NULL) {
+            printf("Error creating a temporary file for editing.\n");
+            fclose(edit);
+            return;
+        }
+
+        char line[100]; // Assuming each line can have up to 100 characters
+        int currentTask = 0;
+
+        while (fgets(line, sizeof(line), edit) != NULL) {
+            currentTask++;
+            if (currentTask == taskChoice) {
+                printf("Enter the updated task: \n");
+                char updatedTask[100];
+                getchar(); // Clearing the input buffer
+                fgets(updatedTask, sizeof(updatedTask), stdin);
+                fprintf(tempEdit, "%s", updatedTask);
+            } else {
+                fprintf(tempEdit, "%s", line);
+            }
+        }
+
+        fclose(tempEdit);
+        fclose(edit);
+
+        remove("edit.txt");
+        rename("temp_edit.txt", "edit.txt");
+
+        printf("Tasks edited successfully.\n");
+
+        // Copy the edited content from edit.txt back to filename
+        file = fopen(filename, "w");
+        edit = fopen("edit.txt", "r");
+
+        if (file == NULL || edit == NULL) {
+            printf("Error opening files for copying.\n");
+            return;
+        }
+
+        while ((ch = fgetc(edit)) != EOF) {
+            fputc(ch, file);
+        }
+
+        fclose(file);
+        fclose(edit);
+    }
     sleep(2);
 }
 
