@@ -92,6 +92,7 @@ void homePage()
 
 void escape()
 {
+
   printf("\nAre you sure you want to exit?(YES/NO)---");
   char ch;
   scanf("%c",&ch);
@@ -109,16 +110,28 @@ void escape()
     printf("\n||________________________________________________________________________||\n");
     sleep(2);
     system("cls");
+    printf("\n\n");
+    
     int choice=1;
     printf("Would you like to provide feedback? (1: Yes, 2: No): ");
+    fflush(stdin);
     scanf("%d",&choice);
+    
     if(choice==1)
     {
         // Feedback form
         char feedback[1000];
-        printf("Please provide your feedback (up to 999 characters):\n");
-        scanf(" %[^\n]", feedback);
+        printf("\nPlease provide your feedback (up to 999 characters):\n");
+        fflush(stdin);
+        fgets(feedback, sizeof(feedback), stdin);
+
         // Save the feedback to a file
+        size_t feedback_length = strlen(feedback);
+        if(feedback_length > 0 && feedback[feedback_length - 1] == '\n') 
+        {
+            feedback[feedback_length - 1] = '\0';
+        }
+        
         FILE *feedbackFile = fopen("feedback.txt", "a");
         fprintf(feedbackFile, "%s\n", feedback);
         fclose(feedbackFile);
@@ -129,10 +142,12 @@ void escape()
     sleep(1);
     exit(0);
   }
+
   else
   {
     homePage();
   }
+  return;
 }
 
 int mainMenu()
