@@ -560,14 +560,13 @@ void updateToDoList(struct Credentials user)
         return;
     }
 
-    struct Task task;
     int taskNumber = seeToDoList(user);
     int taskChoice;
 
     printf("Enter the task number you want to update (0 to exit): ");
     scanf("%d", &taskChoice);
 
-    if (taskChoice <= 0 || taskChoice > taskNumber)
+    if(taskChoice<=0||taskChoice>taskNumber)
     {
         printf("No task selected or invalid task number.\n");
         fclose(file);
@@ -587,65 +586,45 @@ void updateToDoList(struct Credentials user)
 
     while(fgets(line, sizeof(line), file) != NULL)
     {
-        if(serial/9.0==taskChoice-1)
+        int percent;
+        bool completed;
+        if(strstr(line, "Completion Percentage")!=NULL)
         {
-            // Update the task data
-            printf("\nEntered here\n");
-            sscanf(line, "Task Name: %19s", task.taskname);
-            fgets(line, sizeof(line), file); // Read the description line
-            sscanf(line, "Description: %499[^\n]", task.description);
-            fgets(line, sizeof(line), file); // Read the next line
-            sscanf(line, "Completion Percentage: %d", &task.percent_complete);
-            fgets(line, sizeof(line), file);
-            sscanf(line, "Completed: %d", &task.completed);
-            fgets(line, sizeof(line), file);
-            sscanf(line, "Priority: %d", &task.priority);
-            fgets(line, sizeof(line), file);
-            sscanf(line, "Last Date: %d", &task.lastDate);
-            fgets(line, sizeof(line), file);
-            sscanf(line, "Last Time: %d", &task.time);
-            fgets(line, sizeof(line), file);
-            sscanf(line, "Category: %19s", task.category);
-
-            // Update the completion percentage
-            printf("Enter updated completion percentage: ");
-            scanf("%d", &task.percent_complete);
-            if(task.percent_complete >= 100)
+            int percent;
+            if(serial==taskChoice)
             {
-                task.completed = true;
+                printf("Enter updated completion percentage: ");
+                scanf("%d", &percent);
+                fprintf(tempFile, "Completion Percentage: %d\n",percent);
+                printf("To-Do List updated successfully.\n");
+                if(percent==100)
+                {
+                    completed=true;
+                    fgets(line, sizeof(line), file);
+                    fprintf(tempFile, "Completed: %d\n", completed);
+                }
+
             }
-            task.percent_complete=100;
-            // Write the updated task back to the temporary file
-            fprintf(tempFile, "Task Name: %s\n", task.taskname);
-            fprintf(tempFile, "Description: %s", task.description);
-            fprintf(tempFile, "Completion Percentage: %d\n",task.percent_complete);
-            printf("To-Do List updated successfully.\n");
-            fprintf(tempFile, "Completed: %d\n", task.completed);
-            fprintf(tempFile, "Priority: %d\n", task.priority);
-            fprintf(tempFile, "Last Date: %d\n", task.lastDate);
-            fprintf(tempFile, "Last Time: %d\n", task.time);
-            fprintf(tempFile, "Category: %s\n", task.category);
-            fprintf(tempFile, "\n");
+            else            fprintf(tempFile, "%s", line);
+            serial++;
         }
-        else
-        {
-            printf("\n%s\n",line);
-            fprintf(tempFile, "%s", line);
-        }
-        serial++;
+        else            fprintf(tempFile, "%s", line);
     }
 
     // Close the files
     fclose(file);
     fclose(tempFile);
 
+    //Reopen the file
     file = fopen(filename, "w");
     if (file == NULL)
     {
         printf("Error opening the file.\n");
         return;
     }
+
     tempFile = fopen("temp.txt", "r");
+
     if (tempFile == NULL)
     {
         printf("Error creating the temporary file.\n");
@@ -658,6 +637,7 @@ void updateToDoList(struct Credentials user)
         fprintf(file, "%s", line);
     }
 
+    //closing the file
     fclose(file);
     fclose(tempFile);
     sleep(2);
@@ -675,8 +655,8 @@ void deleteToDoList(struct Credentials user)
     sleep(2);
 }
 
-    void editTasks(struct Credentials user)
- {
+void editTasks(struct Credentials user)
+{
     system("cls");
     printf("********************************************************************\n");
     printf("*                      Edit Tasks                                  *\n");

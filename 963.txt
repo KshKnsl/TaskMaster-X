@@ -1,7 +1,7 @@
 Task Name: physicswork
 Description: collegeassignment
-Completion Percentage: 23
-Completed: 0
+Completion Percentage: 100
+Completed: 1
 Priority: 2
 Last Date: 20223
 Last Time: 3593
@@ -9,8 +9,8 @@ Category: Assignment
 
 Task Name: MathsTutorial
 Description: Integrals
-Completion Percentage: 25
-Completed: 0
+Completion Percentage: 100
+Completed: 1
 Priority: 2
 Last Date: 20623
 Last Time: 202
@@ -18,8 +18,8 @@ Category: tutorial
 
 Task Name: 1
 Description: 1
-Completion Percentage: 1
-Completed: 0
+Completion Percentage: 100
+Completed: 1
 Priority: 1
 Last Date: 1
 Last Time: 1
