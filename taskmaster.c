@@ -101,24 +101,27 @@ void escape()
 
   if(ch=='Y'||ch=='y')
   {
-    printf("\n  ________________________________________________________________________");
-    printf("\n||                                                                        ||");
-    printf("\n|| ---------- |     |    /\\    |\\    | |  /      \\     / |=====| |    |   ||");
-    printf("\n||     ||     |     |   /  \\   | \\   | | /        \\   /  |     | |    |   ||");
-    printf("\n||     ||     |=====|  /====\\  |  \\  | |/          \\=/   |     | |    |   ||");
-    printf("\n||     ||     |     | /      \\ |   \\ | |\\           |    |     | |    |   ||");
-    printf("\n||     ||     |     |/        \\|    \\| | \\          |    |=====| |====|   ||");
-    printf("\n||________________________________________________________________________||\n");
+    system("cls");
+    system("color 3E");
+    printf("\n\t\t\t\t\t\t  ________________________________________________________________________");
+    printf("\n\t\t\t\t\t\t||                                                                        ||");
+    printf("\n\t\t\t\t\t\t|| ---------- |     |    /\\    |\\    | |  /      \\     / |=====| |    |   ||");
+    printf("\n\t\t\t\t\t\t||     ||     |     |   /  \\   | \\   | | /        \\   /  |     | |    |   ||");
+    printf("\n\t\t\t\t\t\t||     ||     |=====|  /====\\  |  \\  | |/          \\=/   |     | |    |   ||");
+    printf("\n\t\t\t\t\t\t||     ||     |     | /      \\ |   \\ | |\\           |    |     | |    |   ||");
+    printf("\n\t\t\t\t\t\t||     ||     |     |/        \\|    \\| | \\          |    |=====| |====|   ||");
+    printf("\n\t\t\t\t\t\t||________________________________________________________________________||\n");
     sleep(2);
     system("cls");
     printf("\n\n");
-    
+
+    system("color 2E");
     int choice=1;
     printf("Would you like to provide feedback? (1: Yes, 2: No): ");
     fflush(stdin);
     scanf("%d",&choice);
-    
-    if(choice==1)
+
+    if(choice == 1)
     {
         // Feedback form
         char feedback[1000];
@@ -128,19 +131,27 @@ void escape()
 
         // Save the feedback to a file
         size_t feedback_length = strlen(feedback);
-        if(feedback_length > 0 && feedback[feedback_length - 1] == '\n') 
+        if(feedback_length > 0 && feedback[feedback_length - 1] == '\n')
         {
             feedback[feedback_length - 1] = '\0';
         }
-        
+
         FILE *feedbackFile = fopen("feedback.txt", "a");
-        fprintf(feedbackFile, "%s\n", feedback);
-        fclose(feedbackFile);
-        printf("Thank you for your feedback! It has been saved in feedback.txt.\n");
+        if(feedbackFile == NULL)
+        {
+            printf("Error saving feedback. Please try again later.\n");
+        }
+        else
+        {
+            fprintf(feedbackFile,"%s\n",feedback);
+            fclose(feedbackFile);
+            printf("Thank you for your feedback! It has been saved in feedback.txt.\n");
+        }
     }
 
     printf("\nGoodbye! Have a great day!\n");
     sleep(1);
+    system("cls");
     exit(0);
   }
 
