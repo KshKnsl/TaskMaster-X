@@ -572,7 +572,6 @@ void addTask(struct Credentials user)
 void updateToDoList(struct Credentials user)
 {
     system("cls");
-
     printf("********************************************************************\n");
     printf("*                      Update To-Do List                           *\n");
     printf("********************************************************************\n");
@@ -713,8 +712,8 @@ void deleteToDoList(struct Credentials user)
     printf("To-Do List deleted successfully.\n");
     sleep(2);
 }
-void editTasks(struct Credentials user)
-{
+
+void editTasks(struct Credentials user) {
     system("cls");
     printf("********************************************************************\n");
     printf("*                      Edit Tasks                                  *\n");
@@ -726,11 +725,11 @@ void editTasks(struct Credentials user)
 
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
-        printf("Error opening the file.\n");
+        printf("Error opening the original file.\n");
         return;
     }
 
-    FILE *edit = fopen("edit.txt", "a");
+    FILE *edit = fopen("edit.txt", "w");
     if (edit == NULL) {
         printf("Error creating the editable file.\n");
         fclose(file);
@@ -754,18 +753,16 @@ void editTasks(struct Credentials user)
         edit = fopen("edit.txt", "r+");
 
         if (edit == NULL) {
-            printf("Error opening the destination file for editing.\n");
+            printf("Error opening the editable file for editing.\n");
             return;
         }
 
-        int taskNumber = seeToDoList(user);
         int taskChoice;
-
         printf("Enter the task number you want to edit (0 to exit): ");
         scanf("%d", &taskChoice);
 
-        if (taskChoice <= 0 || taskChoice > taskNumber) {
-            printf("No task selected or invalid task number.\n");
+        if (taskChoice <= 0) {
+            printf("Exiting without changes.\n");
             fclose(edit);
             return;
         }
@@ -800,7 +797,7 @@ void editTasks(struct Credentials user)
         remove("edit.txt");
         rename("temp_edit.txt", "edit.txt");
 
-        printf("Tasks edited successfully.\n");
+        printf("Task edited successfully.\n");
 
         // Copy the edited content from edit.txt back to filename
         file = fopen(filename, "w");
@@ -818,9 +815,8 @@ void editTasks(struct Credentials user)
         fclose(file);
         fclose(edit);
     }
-    sleep(2);
+    printf("Task editing complete.\n");
 }
-
 
 void filterToDoList(struct Credentials user)
 {
