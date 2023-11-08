@@ -528,9 +528,6 @@ void addTask(struct Credentials user)
         return;
     }
 
-
-
-
     struct Task newTask;
     printf("Enter task name (up to 19 characters): ");
     scanf("%19s", newTask.taskname);
@@ -712,14 +709,15 @@ void deleteToDoList(struct Credentials user)
     printf("To-Do List deleted successfully.\n");
     sleep(2);
 }
-
-void editTasks(struct Credentials user) {
+   
+   void editTasks(struct Credentials user) {
     system("cls");
     printf("********************************************************************\n");
     printf("*                      Edit Tasks                                  *\n");
     printf("********************************************************************\n");
 
     char filename[20];
+    char line[1000];
     char response;
     sprintf(filename, "%ld.txt", user.loginID);
 
@@ -775,20 +773,69 @@ void editTasks(struct Credentials user) {
             return;
         }
 
-        char line[100]; // Assuming each line can have up to 100 characters
-        int currentTask = 0;
+        int currentTask = 1; // Variable to track the current task being read
+        struct Task upTask; // Task to store updated details
 
         while (fgets(line, sizeof(line), edit) != NULL) {
-            currentTask++;
             if (currentTask == taskChoice) {
-                printf("Enter the new editable task : \n");
-                char editedTask[100];
-                getchar(); // Clearing the input buffer
-                fgets(editedTask, sizeof(editedTask), stdin);
-                fprintf(tempEdit, "%s", editedTask);
+                printf("Enter what you want to edit in the selected task: \n");
+                printf("1.) Task name\n");
+                printf("2.) Task description\n");
+                printf("3.) Task priority\n");
+                printf("4.) Task percentage\n");
+                printf("5.) Task last date\n");
+                printf("6.) Task last time\n");
+                printf("7.) Task category\n");
+                int z;
+                scanf("%d", &z);
+                switch (z) {
+                    case 1:
+                        printf("Enter the new task name: ");
+                        getchar(); // Clear the input buffer
+                        fgets(upTask.taskName, sizeof(upTask.taskName), stdin);
+                        fprintf(tempEdit, "%s\n", upTask.taskName);
+                        break;
+                    case 2:
+                        printf("Enter the new task description: ");
+                        getchar(); // Clear the input buffer
+                        fgets(upTask.taskDescription, sizeof(upTask.taskDescription), stdin);
+                        fprintf(tempEdit, "%s\n", upTask.taskDescription);
+                        break;
+                    case 3:
+                        printf("Enter the new task priority: ");
+                        scanf("%d", &upTask.taskPriority);
+                        fprintf(tempEdit, "%d\n", upTask.taskPriority);
+                        break;
+                    case 4:
+                        printf("Enter the new task percentage: ");
+                        scanf("%d", &upTask.taskPercentage);
+                        fprintf(tempEdit, "%d\n", upTask.taskPercentage);
+                        break;
+                    case 5:
+                        printf("Enter the new last date: ");
+                        getchar(); // Clear the input buffer
+                        fgets(upTask.lastDate, sizeof(upTask.lastDate), stdin);
+                        fprintf(tempEdit, "%s\n", upTask.lastDate);
+                        break;
+                    case 6:
+                        printf("Enter the new last time: ");
+                        getchar(); // Clear the input buffer
+                        fgets(upTask.lastTime, sizeof(upTask.lastTime), stdin);
+                        fprintf(tempEdit, "%s\n", upTask.lastTime);
+                        break;
+                    case 7:
+                        printf("Enter the new task category: ");
+                        getchar(); // Clear the input buffer
+                        fgets(upTask.taskCategory, sizeof(upTask.taskCategory), stdin);
+                        fprintf(tempEdit, "%s\n", upTask.taskCategory);
+                        break;
+                    default:
+                        printf("Invalid option.\n");
+                }
             } else {
                 fprintf(tempEdit, "%s", line);
             }
+            currentTask++;
         }
 
         fclose(tempEdit);
@@ -815,6 +862,7 @@ void editTasks(struct Credentials user) {
         fclose(file);
         fclose(edit);
     }
+
     printf("Task editing complete.\n");
 }
 
