@@ -710,7 +710,7 @@ void deleteToDoList(struct Credentials user)
     sleep(2);
 }
    
-   void editTasks(struct Credentials user) {
+void editTasks(struct Credentials user) {
     system("cls");
     printf("********************************************************************\n");
     printf("*                      Edit Tasks                                  *\n");
@@ -777,6 +777,10 @@ void deleteToDoList(struct Credentials user)
         struct Task upTask; // Task to store updated details
 
         while (fgets(line, sizeof(line), edit) != NULL) {
+            if (strstr(line, "taskname") != NULL) {
+                currentTask++;
+            }
+
             if (currentTask == taskChoice) {
                 printf("Enter what you want to edit in the selected task: \n");
                 printf("1.) Task name\n");
@@ -793,41 +797,40 @@ void deleteToDoList(struct Credentials user)
                         printf("Enter the new task name: ");
                         getchar(); // Clear the input buffer
                         fgets(upTask.taskname, sizeof(upTask.taskname), stdin);
-                        fprintf(tempEdit, "%s\n", upTask.taskname);
+                        fprintf(tempEdit, "taskname: %s", upTask.taskname);
                         break;
                     case 2:
                         printf("Enter the new task description: ");
                         getchar(); // Clear the input buffer
                         fgets(upTask.description, sizeof(upTask.description), stdin);
-                        fprintf(tempEdit, "%s\n", upTask.description);
+                        fprintf(tempEdit, "description: %s", upTask.description);
                         break;
                     case 3:
                         printf("Enter the new task priority: ");
                         scanf("%d", &upTask.priority);
-                        fprintf(tempEdit, "%d\n", upTask.priority);
+                        fprintf(tempEdit, "priority: %d\n", upTask.priority);
                         break;
                     case 4:
                         printf("Enter the new task percentage: ");
-                        scanf("%d", &upTask.percent_complete);
-                        fprintf(tempEdit, "%d\n", upTask.percent_complete);
+                        updateToDoList(user);
                         break;
                     case 5:
                         printf("Enter the new last date: ");
                         getchar(); // Clear the input buffer
                         fgets(upTask.lastDate, sizeof(upTask.lastDate), stdin);
-                        fprintf(tempEdit, "%d\n", upTask.lastDate);
+                        fprintf(tempEdit, "lastDate: %s", upTask.lastDate);
                         break;
                     case 6:
                         printf("Enter the new last time: ");
                         getchar(); // Clear the input buffer
                         fgets(upTask.time, sizeof(upTask.time), stdin);
-                        fprintf(tempEdit, "%d\n", upTask.time);
+                        fprintf(tempEdit, "time: %s", upTask.time);
                         break;
                     case 7:
                         printf("Enter the new task category: ");
                         getchar(); // Clear the input buffer
                         fgets(upTask.category, sizeof(upTask.category), stdin);
-                        fprintf(tempEdit, "%d\n", upTask.category);
+                        fprintf(tempEdit, "category: %s", upTask.category);
                         break;
                     default:
                         printf("Invalid option.\n");
@@ -845,22 +848,6 @@ void deleteToDoList(struct Credentials user)
         rename("temp_edit.txt", "edit.txt");
 
         printf("Task edited successfully.\n");
-
-        // Copy the edited content from edit.txt back to filename
-        file = fopen(filename, "w");
-        edit = fopen("edit.txt", "r");
-
-        if (file == NULL || edit == NULL) {
-            printf("Error opening files for copying.\n");
-            return;
-        }
-
-        while ((ch = fgetc(edit)) != EOF) {
-            fputc(ch, file);
-        }
-
-        fclose(file);
-        fclose(edit);
     }
 
     printf("Task editing complete.\n");
