@@ -35,6 +35,7 @@ int  mainMenu();
 bool validate(int dob);
 bool loginIDExists(long loginID) ;
 void taskManager(struct Credentials user,int choice);
+
 int  seeToDoList(struct Credentials user);
 void updateToDoList(struct Credentials user);
 void filterToDoList(struct Credentials user);
@@ -666,7 +667,7 @@ void deleteToDoList(struct Credentials user)
     printf("********************************************************************\n");
 
     // Implement code to delete the user's To-Do List
-   printf("To-Do List deleted successfully.\n");
+    printf("To-Do List deleted successfully.\n");
     sleep(2);
 }
 
