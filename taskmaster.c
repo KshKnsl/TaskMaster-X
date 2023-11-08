@@ -676,12 +676,43 @@ void deleteToDoList(struct Credentials user)
     printf("********************************************************************\n");
     printf("*                   Delete To-Do List                               *\n");
     printf("********************************************************************\n");
+    
+    char filename[20];
+    sprintf(filename, "%ld.txt", user.loginID);
 
+    FILE *inputFile, *tempFile;
+    int taskNumber, found = 0;
+    char task[100];
+
+    // Open the input file in read mode
+    inputFile = fopen(filename, "r");
+    if (inputFile == NULL) {
+        printf("Error opening file!\n");
+        return ;
+    }
+    tempFile = fopen("temp.txt", "w");
+    if (tempFile == NULL) {
+        printf("Error opening file!\n");
+        fclose(inputFile);
+        return ;
+    }
+    printf("Enter task number to delete: ");
+    scanf("%d", &taskNumber);
+    while (fscanf(inputFile, "%d %[^\n]s", &found, task) != EOF) {
+        if (found != taskNumber) {
+            fprintf(tempFile, "%d %s\n", found, task);
+        }
+    }
+    fclose(inputFile);
+    fclose(tempFile);
+    remove("filename.txt");
+    rename("temp.txt", "filename.txt");
+
+    printf("Task deleted successfully.\n");
     // Implement code to delete the user's To-Do List
     printf("To-Do List deleted successfully.\n");
     sleep(2);
 }
-
 void editTasks(struct Credentials user)
 {
     system("cls");
