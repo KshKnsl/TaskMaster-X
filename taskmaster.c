@@ -672,7 +672,7 @@ void editTasks(struct Credentials user)
         return;
     }
 
-    FILE *edit = fopen("edit.txt", "w");
+    FILE *edit = fopen("edit.txt", "a");
     if (edit == NULL) {
         printf("Error creating the editable file.\n");
         fclose(file);
@@ -703,7 +703,7 @@ void editTasks(struct Credentials user)
         int taskNumber = seeToDoList(user);
         int taskChoice;
 
-        printf("Enter the task number you want to update (0 to exit): ");
+        printf("Enter the task number you want to edit (0 to exit): ");
         scanf("%d", &taskChoice);
 
         if (taskChoice <= 0 || taskChoice > taskNumber) {
@@ -726,11 +726,11 @@ void editTasks(struct Credentials user)
         while (fgets(line, sizeof(line), edit) != NULL) {
             currentTask++;
             if (currentTask == taskChoice) {
-                printf("Enter the updated task: \n");
-                char updatedTask[100];
+                printf("Enter the new editable task : \n");
+                char editedTask[100];
                 getchar(); // Clearing the input buffer
-                fgets(updatedTask, sizeof(updatedTask), stdin);
-                fprintf(tempEdit, "%s", updatedTask);
+                fgets(editedTask, sizeof(editedTask), stdin);
+                fprintf(tempEdit, "%s", editedTask);
             } else {
                 fprintf(tempEdit, "%s", line);
             }
