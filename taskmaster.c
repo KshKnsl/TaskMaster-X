@@ -792,42 +792,42 @@ void deleteToDoList(struct Credentials user)
                     case 1:
                         printf("Enter the new task name: ");
                         getchar(); // Clear the input buffer
-                        fgets(upTask.taskName, sizeof(upTask.taskName), stdin);
-                        fprintf(tempEdit, "%s\n", upTask.taskName);
+                        fgets(upTask.taskname, sizeof(upTask.taskname), stdin);
+                        fprintf(tempEdit, "%s\n", upTask.taskname);
                         break;
                     case 2:
                         printf("Enter the new task description: ");
                         getchar(); // Clear the input buffer
-                        fgets(upTask.taskDescription, sizeof(upTask.taskDescription), stdin);
-                        fprintf(tempEdit, "%s\n", upTask.taskDescription);
+                        fgets(upTask.description, sizeof(upTask.description), stdin);
+                        fprintf(tempEdit, "%s\n", upTask.description);
                         break;
                     case 3:
                         printf("Enter the new task priority: ");
-                        scanf("%d", &upTask.taskPriority);
-                        fprintf(tempEdit, "%d\n", upTask.taskPriority);
+                        scanf("%d", &upTask.priority);
+                        fprintf(tempEdit, "%d\n", upTask.priority);
                         break;
                     case 4:
                         printf("Enter the new task percentage: ");
-                        scanf("%d", &upTask.taskPercentage);
-                        fprintf(tempEdit, "%d\n", upTask.taskPercentage);
+                        scanf("%d", &upTask.percent_complete);
+                        fprintf(tempEdit, "%d\n", upTask.percent_complete);
                         break;
                     case 5:
                         printf("Enter the new last date: ");
                         getchar(); // Clear the input buffer
                         fgets(upTask.lastDate, sizeof(upTask.lastDate), stdin);
-                        fprintf(tempEdit, "%s\n", upTask.lastDate);
+                        fprintf(tempEdit, "%d\n", upTask.lastDate);
                         break;
                     case 6:
                         printf("Enter the new last time: ");
                         getchar(); // Clear the input buffer
-                        fgets(upTask.lastTime, sizeof(upTask.lastTime), stdin);
-                        fprintf(tempEdit, "%s\n", upTask.lastTime);
+                        fgets(upTask.time, sizeof(upTask.time), stdin);
+                        fprintf(tempEdit, "%d\n", upTask.time);
                         break;
                     case 7:
                         printf("Enter the new task category: ");
                         getchar(); // Clear the input buffer
-                        fgets(upTask.taskCategory, sizeof(upTask.taskCategory), stdin);
-                        fprintf(tempEdit, "%s\n", upTask.taskCategory);
+                        fgets(upTask.category, sizeof(upTask.category), stdin);
+                        fprintf(tempEdit, "%d\n", upTask.category);
                         break;
                     default:
                         printf("Invalid option.\n");
