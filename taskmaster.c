@@ -65,8 +65,7 @@ void homePage()
     printf("||     MENU:-                                                          ||\n");
     printf("||   1.Login                                                           ||\n");
     printf("||   2.Create a new account                                            ||\n");
-    printf("||   3.Guest Mode                                                      ||\n");
-    printf("||   4.CLOSE TASKMASTER X                                              ||\n");
+    printf("||   3.CLOSE TASKMASTER X                                              ||\n");
     printf("||_____________________________________________________________________||\n");
     printf("ENTER YOUR CHOICE::");
     scanf("%d",&choice);
@@ -81,9 +80,6 @@ void homePage()
             createAccount();
             break;
         case 3:
-            guest();
-            break;
-        case 4:
             escape();
             break;
         default:
@@ -329,28 +325,6 @@ void createAccount()
     login();
 }
 
-void guest()
-{
-    system("cls");
-    system("color 5a");
-    printf("\nGuest Mode Loading.....\n");
-    sleep(1);
-    struct Credentials guestUser;
-    guestUser.loginID = 12345;
-    guestUser.Password = 12345;
-    guestUser.verified = true;
-    printf("\nGuest Mode READY.....\n");
-    sleep(1);
-        printf("**************************************\n");
-        printf("*          WELCOME GUEST             *\n");
-        printf("**************************************\n");
-    sleep(1);
-    printf("Guiding you to Main Menu...");
-    sleep(2);
-    int choice = mainMenu();
-    taskManager(guestUser,choice);
-}
-
 bool validate(int dob)
 {
     int day=dob/10000;
@@ -454,7 +428,7 @@ int seeToDoList(struct Credentials user)
     char filename[20];
     sprintf(filename, "%ld.txt", user.loginID); // Generate the file's name based on the user's loginID
     system("cls");
-
+    system("color 5a");
     FILE *file =fopen(filename,"r");
     if(file==NULL)
     {
