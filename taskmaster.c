@@ -675,12 +675,19 @@ void deleteToDoList(struct Credentials user)
     }
     fclose(inputFile);
     fclose(tempFile);
-    remove("filename.txt");
-    rename("temp.txt", "filename.txt");
+    // Remove the original file
+    if (remove(filename) != 0) {
+        printf("Error deleting the original file.\n");
+        return;
+    }
+
+    // Rename the temporary file to the original filename
+    if (rename("temp.txt", filename) != 0) {
+        printf("Error renaming the temporary file.\n");
+        return;
+    }
 
     printf("Task deleted successfully.\n");
-    // Implement code to delete the user's To-Do List
-    printf("To-Do List deleted successfully.\n");
     sleep(2);
 }
    
@@ -834,8 +841,8 @@ void editTasks(struct Credentials user) {
     }
 
     printf("Task editing complete.\n");
+     sleep(2);
 }
-
 
 void filterToDoList(struct Credentials user)
 {
