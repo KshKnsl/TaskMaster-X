@@ -818,14 +818,24 @@ void editTasks(struct Credentials user) {
         fclose(tempEdit);
         fclose(edit);
 
-        remove("edit.txt");
-        rename("temp_edit.txt", "edit.txt");
+        // Remove the original file
+        if (remove(filename) != 0) {
+            printf("Error deleting the original file.\n");
+            return;
+        }
+
+        // Rename the temporary file to the original filename
+        if (rename("temp_edit.txt", filename) != 0) {
+            printf("Error renaming the temporary file.\n");
+            return;
+        }
 
         printf("Task edited successfully.\n");
     }
 
     printf("Task editing complete.\n");
 }
+
 
 void filterToDoList(struct Credentials user)
 {
