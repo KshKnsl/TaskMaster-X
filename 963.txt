@@ -16,11 +16,3 @@ Last Date: 20623
 Last Time: 202
 Category: tutorial
 
-Task Name: 1
-Description: 1
-Completion Percentage: 100
-Completed: 1
-Priority: 1
-Last Date: 1
-Last Time: 1
-Category: 1
