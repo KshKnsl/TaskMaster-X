@@ -608,9 +608,15 @@ void updateToDoList(struct Credentials user)
                 fprintf(tempFile, "Completion Percentage: %d\n",percent);
                 printf("To-Do List updated successfully.\n");
         
-                if(percent==100)
+                if(percent>=100)
                 {
                     completed=true;
+                    fgets(line, sizeof(line), file);
+                    fprintf(tempFile, "Completed: %d\n", completed);
+                }
+                else
+                {
+                    completed=false;
                     fgets(line, sizeof(line), file);
                     fprintf(tempFile, "Completed: %d\n", completed);
                 }
