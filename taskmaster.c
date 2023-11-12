@@ -143,10 +143,19 @@ void escape()
             fclose(feedbackFile);
             printf("Thank you for your feedback! It has been saved in feedback.txt.\n");
         }
+
+        printf("\nRATE US NOW!!\n");
+        printf("1. *\n");
+        printf("2. **\n");
+        printf("3. ***\n");
+        printf("4. ****\n");
+        printf("5. *****\n");           
+        int rate;
+        scanf("%d",&rate);
     }
 
     printf("\nGoodbye! Have a great day!\n");
-    sleep(1);
+    sleep(2);
     system("cls");
     exit(0);
   }
@@ -430,10 +439,12 @@ int seeToDoList(struct Credentials user)
     system("cls");
     system("color 5a");
     FILE *file =fopen(filename,"r");
+
     if(file==NULL)
     {
         printf("Your ToDo List is empty.\n");
     }
+
     else
     {
         serial = 1;
@@ -585,6 +596,7 @@ void updateToDoList(struct Credentials user)
     {
         int percent;
         bool completed;
+        
         if(strstr(line, "Completion Percentage")!=NULL)
         {
             int percent;
@@ -592,8 +604,10 @@ void updateToDoList(struct Credentials user)
             {
                 printf("Enter updated completion percentage: ");
                 scanf("%d", &percent);
+        
                 fprintf(tempFile, "Completion Percentage: %d\n",percent);
                 printf("To-Do List updated successfully.\n");
+        
                 if(percent==100)
                 {
                     completed=true;
@@ -602,6 +616,7 @@ void updateToDoList(struct Credentials user)
                 }
 
             }
+        
             else            fprintf(tempFile, "%s", line);
             serial++;
         }
@@ -662,6 +677,7 @@ void deleteToDoList(struct Credentials user)
         printf("Error opening file!\n");
         return ;
     }
+    
     FILE *tempFile = fopen("temp.txt", "w");
     if(tempFile == NULL) 
     {
@@ -771,6 +787,7 @@ void editTasks(struct Credentials user)
         fclose(edit);
         return;
     }
+    
     printf("Enter what you want to edit in the selected task: \n");
     printf("1.) Task name\n");
     printf("2.) Task description\n");
@@ -779,7 +796,7 @@ void editTasks(struct Credentials user)
     printf("5.) Task last time\n");
     printf("6.) Task category\n");
     printf("0.) Exit\n");
-    
+    printf("Enter your choice : ");
     int z;
     scanf("%d", &z);            
     while(fgets(line, sizeof(line), file) != NULL)
@@ -794,12 +811,15 @@ void editTasks(struct Credentials user)
                     case 0:
                         escape();
                         break;
+    
                     case 1:
+                    {
                         char newTaskName[20];
                         printf("Enter the new task name (up to 19 characters): ");
                         scanf("%19s", newTaskName);
                         fprintf(edit, "Task Name: %s\n", newTaskName);
                         break;
+                    }
                     case 2:
                         fprintf(edit, "%s", line);
                         fgets(line, sizeof(line),file);
@@ -823,6 +843,7 @@ void editTasks(struct Credentials user)
                         scanf("%d", &newPriority);
                         fprintf(edit, "Priority: %d\n", newPriority);
                         break;
+    
                     case 4:
                         fprintf(edit, "%s", line);
                         fgets(line, sizeof(line),file);
@@ -841,7 +862,7 @@ void editTasks(struct Credentials user)
                         fprintf(edit, "Last Date: %d\n", newLastDate);
                         break;
 
-                    case 6:
+                    case 5:
                         fprintf(edit, "%s", line);
                         fgets(line, sizeof(line),file);
                         fprintf(edit, "%s", line);
@@ -861,7 +882,7 @@ void editTasks(struct Credentials user)
                         fprintf(edit, "Last Time: %d\n", newLastTime);
                         break;
 
-                    case 7:
+                    case 6:
                         fprintf(edit, "%s", line);
                         fgets(line, sizeof(line),file);
                         fprintf(edit, "%s", line);
@@ -882,15 +903,18 @@ void editTasks(struct Credentials user)
                         scanf("%19s", newCategory);
                         fprintf(edit, "Category: %s\n", newCategory);
                         break;
+    
                     default:
                         printf("Invalid option.\n");
+                        sleep(2);
+                        taskManager(user,mainMenu());
                 }
             } 
             else 
-                fprintf(tempEdit, "%s", line);
+                fprintf(edit, "%s", line);
         }
         else 
-            fprintf(tempEdit, "%s", line);
+            fprintf(edit, "%s", line);
     }
     
     fclose(file);
