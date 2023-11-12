@@ -143,10 +143,19 @@ void escape()
             fclose(feedbackFile);
             printf("Thank you for your feedback! It has been saved in feedback.txt.\n");
         }
+
+        printf("\nRATE US NOW!!\n");
+        printf("1. *\n");
+        printf("2. **\n");
+        printf("3. ***\n");
+        printf("4. ****\n");
+        printf("5. *****\n");           
+        int rate;
+        scanf("%d",&rate);
     }
 
     printf("\nGoodbye! Have a great day!\n");
-    sleep(1);
+    sleep(2);
     system("cls");
     exit(0);
   }
@@ -430,10 +439,12 @@ int seeToDoList(struct Credentials user)
     system("cls");
     system("color 5a");
     FILE *file =fopen(filename,"r");
+
     if(file==NULL)
     {
         printf("Your ToDo List is empty.\n");
     }
+
     else
     {
         serial = 1;
@@ -556,7 +567,7 @@ void updateToDoList(struct Credentials user)
         printf("Error opening the file.\n");
         return;
     }
-
+    sleep(1);
     int taskNumber = seeToDoList(user);
     int taskChoice;
 
@@ -585,6 +596,7 @@ void updateToDoList(struct Credentials user)
     {
         int percent;
         bool completed;
+        
         if(strstr(line, "Completion Percentage")!=NULL)
         {
             int percent;
@@ -592,16 +604,25 @@ void updateToDoList(struct Credentials user)
             {
                 printf("Enter updated completion percentage: ");
                 scanf("%d", &percent);
+        
                 fprintf(tempFile, "Completion Percentage: %d\n",percent);
                 printf("To-Do List updated successfully.\n");
-                if(percent==100)
+        
+                if(percent>=100)
                 {
                     completed=true;
                     fgets(line, sizeof(line), file);
                     fprintf(tempFile, "Completed: %d\n", completed);
                 }
+                else
+                {
+                    completed=false;
+                    fgets(line, sizeof(line), file);
+                    fprintf(tempFile, "Completed: %d\n", completed);
+                }
 
             }
+        
             else            fprintf(tempFile, "%s", line);
             serial++;
         }
@@ -644,54 +665,77 @@ void deleteToDoList(struct Credentials user)
 {
     system("cls");
     printf("********************************************************************\n");
-    printf("*                   Delete To-Do List                               *\n");
+    printf("*                   Delete To-Do List                              *\n");
     printf("********************************************************************\n");
     
     char filename[20];
+    char line[1000];
     sprintf(filename, "%ld.txt", user.loginID);
+    sleep(1);
 
-    FILE *inputFile, *tempFile;
-    int taskNumber, found = 0;
+    int taskNumber=seeToDoList(user);
+    int taskChoice, serial = 0;
     char task[100];
 
-    // Open the input file in read mode
-    inputFile = fopen(filename, "r");
-    if (inputFile == NULL) {
+    FILE *file = fopen(filename, "r");
+    if(file == NULL) 
+    {
         printf("Error opening file!\n");
         return ;
     }
-    tempFile = fopen("temp.txt", "w");
-    if (tempFile == NULL) {
+    
+    FILE *tempFile = fopen("temp.txt", "w");
+    if(tempFile == NULL) 
+    {
         printf("Error opening file!\n");
-        fclose(inputFile);
+        fclose(file);
         return ;
     }
+
     printf("Enter task number to delete: ");
-    scanf("%d", &taskNumber);
-    while (fscanf(inputFile, "%d %[^\n]s", &found, task) != EOF) {
-        if (found != taskNumber) {
-            fprintf(tempFile, "%d %s\n", found, task);
-        }
-    }
-    fclose(inputFile);
-    fclose(tempFile);
-    // Remove the original file
-    if (remove(filename) != 0) {
-        printf("Error deleting the original file.\n");
+    scanf("%d", &taskChoice);
+    if(taskChoice<=0||taskChoice>taskNumber)
+    {
+        printf("No task selected or invalid task number.\n");
+        fclose(file);
         return;
     }
 
-    // Rename the temporary file to the original filename
-    if (rename("temp.txt", filename) != 0) {
-        printf("Error renaming the temporary file.\n");
-        return;
+    while(fgets(line, sizeof(line), file) != NULL)
+    {
+        if(strstr(line, "Task Name:")!=NULL)
+        {
+            serial++;
+            if(serial==taskChoice)
+            {
+                fgets(line, sizeof(line), file);
+                fgets(line, sizeof(line), file);
+                fgets(line, sizeof(line), file);
+                fgets(line, sizeof(line), file);
+                fgets(line, sizeof(line), file);
+                fgets(line, sizeof(line), file);
+                fgets(line, sizeof(line), file);
+                fgets(line, sizeof(line), file);
+            }
+            else        fprintf(tempFile, "%s", line);
+        }
+        else    fprintf(tempFile, "%s", line);
     }
+    printf("Task deleted successfully.\n");
+ 
+    fclose(file);
+    fclose(tempFile);
+    remove("filename.txt");
+    rename("temp.txt", "filename.txt");
 
     printf("Task deleted successfully.\n");
+    // Implement code to delete the user's To-Do List
+    printf("To-Do List deleted successfully.\n");
     sleep(2);
 }
    
-void editTasks(struct Credentials user) {
+void editTasks(struct Credentials user) 
+{
     system("cls");
     printf("********************************************************************\n");
     printf("*                      Edit Tasks                                  *\n");
@@ -699,149 +743,192 @@ void editTasks(struct Credentials user) {
 
     char filename[20];
     char line[1000];
-    char response;
     sprintf(filename, "%ld.txt", user.loginID);
+    sleep(1);
 
     FILE *file = fopen(filename, "r");
-    if (file == NULL) {
+    if(file == NULL) 
+    {
         printf("Error opening the original file.\n");
         return;
     }
 
+    int taskNumber=seeToDoList(user);
+    int taskChoice,currentTask= 0;
+
     FILE *edit = fopen("edit.txt", "w");
-    if (edit == NULL) {
+    if(edit == NULL) 
+    {
         printf("Error creating the editable file.\n");
         fclose(file);
         return;
     }
 
-    char ch;
-    while ((ch = fgetc(file)) != EOF) {
-        fputc(ch, edit);
+    printf("Enter the task number you want to edit (0 to exit): ");
+    scanf("%d", &taskChoice);
+
+    if(taskChoice<=0||taskChoice>taskNumber)
+    {
+        printf("INVALID INPUT!! Exiting without changes.\n");
+        fclose(edit);
+        return;
     }
-
-    fclose(file);
-    fclose(edit);
-
-    printf("File contents copied successfully to edit.txt.\n");
-
-    printf("Do you want to edit the file? (y/n): ");
-    scanf(" %c", &response);
-
-    if (response == 'y' || response == 'Y') {
-        edit = fopen("edit.txt", "r+");
-
-        if (edit == NULL) {
-            printf("Error opening the editable file for editing.\n");
-            return;
-        }
-
-        int taskChoice;
-        printf("Enter the task number you want to edit (0 to exit): ");
-        scanf("%d", &taskChoice);
-
-        if (taskChoice <= 0) {
-            printf("Exiting without changes.\n");
-            fclose(edit);
-            return;
-        }
-
-        FILE *tempEdit = fopen("temp_edit.txt", "w");
-
-        if (tempEdit == NULL) {
-            printf("Error creating a temporary file for editing.\n");
-            fclose(edit);
-            return;
-        }
-
-        int currentTask = 1; // Variable to track the current task being read
-        struct Task upTask; // Task to store updated details
-
-        while (fgets(line, sizeof(line), edit) != NULL) {
-            if (strstr(line, "taskname") != NULL) {
-                currentTask++;
-            }
-
-            if (currentTask == taskChoice) {
-                printf("Enter what you want to edit in the selected task: \n");
-                printf("1.) Task name\n");
-                printf("2.) Task description\n");
-                printf("3.) Task priority\n");
-                printf("4.) Task percentage\n");
-                printf("5.) Task last date\n");
-                printf("6.) Task last time\n");
-                printf("7.) Task category\n");
-                int z;
-                scanf("%d", &z);
-                switch (z) {
+    
+    printf("Enter what you want to edit in the selected task: \n");
+    printf("1.) Task name\n");
+    printf("2.) Task description\n");
+    printf("3.) Task priority\n");
+    printf("4.) Task last date\n");
+    printf("5.) Task last time\n");
+    printf("6.) Task category\n");
+    printf("0.) Exit\n");
+    printf("Enter your choice : ");
+    int z;
+    scanf("%d", &z);            
+    while(fgets(line, sizeof(line), file) != NULL)
+    {
+        if(strstr(line, "Task Name:")!=NULL)
+        {
+            currentTask++;
+            if(currentTask == taskChoice) 
+            {
+                switch(z) 
+                {
+                    case 0:
+                        escape();
+                        break;
+    
                     case 1:
-                        printf("Enter the new task name: ");
-                        getchar(); // Clear the input buffer
-                        fgets(upTask.taskname, sizeof(upTask.taskname), stdin);
-                        fprintf(tempEdit, "taskname: %s", upTask.taskname);
+                    {
+                        char newTaskName[20];
+                        printf("Enter the new task name (up to 19 characters): ");
+                        scanf("%19s", newTaskName);
+                        fprintf(edit, "Task Name: %s\n", newTaskName);
                         break;
+                    }
                     case 2:
-                        printf("Enter the new task description: ");
-                        getchar(); // Clear the input buffer
-                        fgets(upTask.description, sizeof(upTask.description), stdin);
-                        fprintf(tempEdit, "description: %s", upTask.description);
+                        fprintf(edit, "%s", line);
+                        fgets(line, sizeof(line),file);
+                        char newDescription[500];
+                        printf("Enter the new task description (up to 499 characters): ");
+                        scanf(" %[^\n]", newDescription);
+                        fprintf(edit, "Description: %s\n", newDescription);
                         break;
+
                     case 3:
-                        printf("Enter the new task priority: ");
-                        scanf("%d", &upTask.priority);
-                        fprintf(tempEdit, "priority: %d\n", upTask.priority);
+                        fprintf(edit, "%s", line);
+                        fgets(line, sizeof(line),file);
+                        fprintf(edit, "%s", line);
+                        fgets(line, sizeof(line),file);
+                        fprintf(edit, "%s", line);
+                        fgets(line, sizeof(line),file);
+                        fprintf(edit, "%s", line);
+                        fgets(line, sizeof(line),file);
+                        int newPriority;
+                        printf("Enter the new task priority (1-5): ");
+                        scanf("%d", &newPriority);
+                        fprintf(edit, "Priority: %d\n", newPriority);
                         break;
+    
                     case 4:
-                        printf("Enter the new task percentage: ");
-                        updateToDoList(user);
+                        fprintf(edit, "%s", line);
+                        fgets(line, sizeof(line),file);
+                        fprintf(edit, "%s", line);
+                        fgets(line, sizeof(line),file);
+                        fprintf(edit, "%s", line);
+                        fgets(line, sizeof(line),file);
+                        fprintf(edit, "%s", line);
+                        fgets(line, sizeof(line),file);
+                        fprintf(edit, "%s", line);
+                        fgets(line, sizeof(line),file);
+                        
+                        int newLastDate;
+                        printf("Enter the new last date for the task: ");
+                        scanf("%d", &newLastDate);
+                        fprintf(edit, "Last Date: %d\n", newLastDate);
                         break;
+
                     case 5:
-                        printf("Enter the new last date: ");
-                        getchar(); // Clear the input buffer
-                        fgets(upTask.lastDate, sizeof(upTask.lastDate), stdin);
-                        fprintf(tempEdit, "lastDate: %s", upTask.lastDate);
+                        fprintf(edit, "%s", line);
+                        fgets(line, sizeof(line),file);
+                        fprintf(edit, "%s", line);
+                        fgets(line, sizeof(line),file);
+                        fprintf(edit, "%s", line);
+                        fgets(line, sizeof(line),file);
+                        fprintf(edit, "%s", line);
+                        fgets(line, sizeof(line),file);
+                        fprintf(edit, "%s", line);
+                        fgets(line, sizeof(line),file);
+                        fprintf(edit, "%s", line);
+                        fgets(line, sizeof(line),file);
+                        
+                        int newLastTime;
+                        printf("Enter the new last time for the task: ");
+                        scanf("%d", &newLastTime);
+                        fprintf(edit, "Last Time: %d\n", newLastTime);
                         break;
+
                     case 6:
-                        printf("Enter the new last time: ");
-                        getchar(); // Clear the input buffer
-                        fgets(upTask.time, sizeof(upTask.time), stdin);
-                        fprintf(tempEdit, "time: %s", upTask.time);
+                        fprintf(edit, "%s", line);
+                        fgets(line, sizeof(line),file);
+                        fprintf(edit, "%s", line);
+                        fgets(line, sizeof(line),file);
+                        fprintf(edit, "%s", line);
+                        fgets(line, sizeof(line),file);
+                        fprintf(edit, "%s", line);
+                        fgets(line, sizeof(line),file);
+                        fprintf(edit, "%s", line);
+                        fgets(line, sizeof(line),file);
+                        fprintf(edit, "%s", line);
+                        fgets(line, sizeof(line),file);
+                        fprintf(edit, "%s", line);
+                        fgets(line, sizeof(line),file);
+                        
+                        char newCategory[20];
+                        printf("Enter the new task category (up to 19 characters): ");
+                        scanf("%19s", newCategory);
+                        fprintf(edit, "Category: %s\n", newCategory);
                         break;
-                    case 7:
-                        printf("Enter the new task category: ");
-                        getchar(); // Clear the input buffer
-                        fgets(upTask.category, sizeof(upTask.category), stdin);
-                        fprintf(tempEdit, "category: %s", upTask.category);
-                        break;
+    
                     default:
                         printf("Invalid option.\n");
+                        sleep(2);
+                        taskManager(user,mainMenu());
                 }
-            } else {
-                fprintf(tempEdit, "%s", line);
-            }
-            currentTask++;
+            } 
+            else 
+                fprintf(edit, "%s", line);
         }
+        else 
+            fprintf(edit, "%s", line);
+    }
+    
+    fclose(file);
+    fclose(edit);
+   
+    //Reopen the file
+    file = fopen(filename, "w");
+    if(file == NULL)
+    {
+        printf("Error opening the file.\n");
+        return;
+    }
 
-        fclose(tempEdit);
-        fclose(edit);
+    edit = fopen("edit.txt", "r");
 
-        // Remove the original file
-        if (remove(filename) != 0) {
-            printf("Error deleting the original file.\n");
-            return;
-        }
+    if(edit == NULL)
+    {
+        printf("Error creating the temporary file.\n");
+        fclose(file);
+        return;
+    }
 
-        // Rename the temporary file to the original filename
-        if (rename("temp_edit.txt", filename) != 0) {
-            printf("Error renaming the temporary file.\n");
-            return;
-        }
-
-        printf("Task edited successfully.\n");
+    while(fgets(line, sizeof(line), edit) != NULL)
+    {
+        fprintf(file, "%s", line);
     }
 
     printf("Task editing complete.\n");
-     sleep(2);
 }
 
 void filterToDoList(struct Credentials user)
