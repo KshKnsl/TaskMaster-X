@@ -1,11 +1,3 @@
-
-Completion Percentage: 30
-Completed: 0
-Priority: 8
-Last Date: 0
-Last Time: 16
-Category: aa
-
 Task Name: as
 Description: as
 Completion Percentage: 20
