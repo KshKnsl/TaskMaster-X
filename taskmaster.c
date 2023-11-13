@@ -298,6 +298,7 @@ void createAccount()
         printf("\nInvalid Name. Please use only letters and spaces.Retry.....");
         goto retry1;
     }
+    
     retry2:
     printf("Enter your date of birth (format DDMMYY): ");
     scanf("%d", &dob);
@@ -312,6 +313,7 @@ void createAccount()
         printf("-----------Date Validated Successfully------------ \n");
     }
     long newLoginID;
+
     while(1)
     {
         printf("Enter a new Login ID: ");
@@ -343,6 +345,7 @@ bool validate(int dob)
     {
          return false;
     }
+    
     if((month==2&&day>29)||((month==4||month==6||month==9||month==11)&&day>30))
     {
         return false;
@@ -371,6 +374,7 @@ bool loginIDExists(long loginID)
     long storedLoginID, storedPassword;
     bool found=false;
     char line[100];
+    
     while(fgets(line,sizeof(line),file)!=NULL)
     {
         sscanf(line,"%ld,%ld",&storedLoginID,&storedPassword);
@@ -562,7 +566,7 @@ void updateToDoList(struct Credentials user)
     sprintf(filename, "%ld.txt", user.loginID);
 
     FILE *file = fopen(filename, "r");
-    if (file == NULL)
+    if(file==NULL)
     {
         printf("Error opening the file.\n");
         return;
@@ -585,7 +589,7 @@ void updateToDoList(struct Credentials user)
     int serial = 1;
 
     FILE *tempFile = fopen("temp.txt", "w");
-    if (tempFile == NULL)
+    if(tempFile==NULL)
     {
         printf("Error creating the temporary file.\n");
         fclose(file);
@@ -622,11 +626,16 @@ void updateToDoList(struct Credentials user)
                 }
 
             }
-        
-            else            fprintf(tempFile, "%s", line);
+            else
+            {
+                fprintf(tempFile, "%s", line);
+            }
             serial++;
         }
-        else            fprintf(tempFile, "%s", line);
+        else
+        {
+                    fprintf(tempFile, "%s", line);
+        }
     }
 
     // Close the files
@@ -635,7 +644,7 @@ void updateToDoList(struct Credentials user)
 
     //Reopen the file
     file = fopen(filename, "w");
-    if (file == NULL)
+    if(file==NULL)
     {
         printf("Error opening the file.\n");
         return;
@@ -643,7 +652,7 @@ void updateToDoList(struct Credentials user)
 
     tempFile = fopen("temp.txt", "r");
 
-    if (tempFile == NULL)
+    if(tempFile==NULL)
     {
         printf("Error creating the temporary file.\n");
         fclose(file);
@@ -897,10 +906,14 @@ void editTasks(struct Credentials user)
                 }
             } 
             else 
+            {
                 fprintf(edit, "%s", line);
+            }
         }
         else 
+        {
             fprintf(edit, "%s", line);
+        }
     }
     
     fclose(file);
