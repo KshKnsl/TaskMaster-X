@@ -527,8 +527,15 @@ void addTask(struct Credentials user)
     printf("Enter task completion percentage: ");
     scanf("%d", &newTask.percent_complete);
 
-    newTask.completed = false; // Initialize to false
-
+    if(newTask.percent_complete<100)
+    {
+        newTask.completed = false; // Initialize to false
+    }
+    else
+    {
+        newTask.completed = true;
+    
+    }
     printf("Enter task priority (1-5): ");
     scanf("%d", &newTask.priority);
 
@@ -734,9 +741,6 @@ void deleteToDoList(struct Credentials user)
  
     fclose(file);
     fclose(tempFile);
-    remove("filename.txt");
-    rename("temp.txt", "filename.txt");
-
     printf("Task deleted successfully.\n");
     // Implement code to delete the user's To-Do List
     printf("To-Do List deleted successfully.\n");
@@ -984,7 +988,7 @@ void filterToDoList(struct Credentials user)
     case 0:
         fclose(file);
         system("color 07");
-        return;
+        taskManager(user,mainMenu());
 
     case 1:
     {
@@ -1141,114 +1145,114 @@ void filterToDoList(struct Credentials user)
         break;
     }
     case 4:
-{
+    {
     // Filter by Last Date
-    int lastDate;
-    printf("Enter last date to filter tasks: ");
-    scanf("%d", &lastDate);
+        int lastDate;
+        printf("Enter last date to filter tasks: ");
+        scanf("%d", &lastDate);
 
-    system("color 0D");  // Change text to light purple and background to black
+        system("color 0D");  // Change text to light purple and background to black
 
-    printf("**********************************************************************************************************************************************\n");
-    printf("*   Serial No |   Task Name                  |   %% Complete  |   Completed  |   Priority   |   Due Date  |  Due Time  |    Category          *\n");
-    printf("**********************************************************************************************************************************************\n");
+        printf("**********************************************************************************************************************************************\n");
+        printf("*   Serial No |   Task Name                  |   %% Complete  |   Completed  |   Priority   |   Due Date  |  Due Time  |    Category          *\n");
+        printf("**********************************************************************************************************************************************\n");
 
-    struct Task task;
+        struct Task task;
 
-    while(fgets(line, sizeof(line), file) != NULL)
-    {
-        if(sscanf(line, "Task Name: %19s", task.taskname) == 1)
+        while(fgets(line, sizeof(line), file) != NULL)
         {
-            // Successfully read the task name, now process the rest of the data
-            fgets(line, sizeof(line), file); // Read the description line
-            sscanf(line, "Description: %499[^\n]", task.description); // Read the description
-
-            fgets(line, sizeof(line), file); // Read the next line
-            sscanf(line, "Completion Percentage: %d", &task.percent_complete);
-
-            fgets(line, sizeof(line), file);
-            sscanf(line, "Completed: %d", &task.completed);
-
-            fgets(line, sizeof(line), file);
-            sscanf(line, "Priority: %d", &task.priority);
-
-            fgets(line, sizeof(line), file);
-            sscanf(line, "Last Date: %d", &task.lastDate);
-
-            fgets(line, sizeof(line), file);
-            sscanf(line, "Last Time: %d", &task.time);
-
-            fgets(line, sizeof(line), file);
-            sscanf(line, "Category: %19s", task.category);
-
-            fgets(line, sizeof(line), file);
-
-            if(task.lastDate == lastDate)
+            if(sscanf(line, "Task Name: %19s", task.taskname) == 1)
             {
-                printf("* %10d  | %-28s | %11d%%  | %-11s  | %11d  | %10d  | %9d  | %-20s *\n",serial, task.taskname, task.percent_complete, task.completed ? "Yes" : "No",task.priority, task.lastDate, task.time, task.category);
-                printf("**********************************************************************************************************************************************\n");
-                serial++; // Increment the serial number
+                // Successfully read the task name, now process the rest of the data
+                fgets(line, sizeof(line), file); // Read the description line
+                sscanf(line, "Description: %499[^\n]", task.description); // Read the description
+
+                fgets(line, sizeof(line), file); // Read the next line
+                sscanf(line, "Completion Percentage: %d", &task.percent_complete);
+
+                fgets(line, sizeof(line), file);
+                sscanf(line, "Completed: %d", &task.completed);
+
+                fgets(line, sizeof(line), file);
+                sscanf(line, "Priority: %d", &task.priority);
+
+                fgets(line, sizeof(line), file);
+                sscanf(line, "Last Date: %d", &task.lastDate);
+
+                fgets(line, sizeof(line), file);
+                sscanf(line, "Last Time: %d", &task.time);
+
+                fgets(line, sizeof(line), file);
+                sscanf(line, "Category: %19s", task.category);
+
+                fgets(line, sizeof(line), file);
+
+                if(task.lastDate == lastDate)
+                {
+                    printf("* %10d  | %-28s | %11d%%  | %-11s  | %11d  | %10d  | %9d  | %-20s *\n",serial, task.taskname, task.percent_complete, task.completed ? "Yes" : "No",task.priority, task.lastDate, task.time, task.category);
+                    printf("**********************************************************************************************************************************************\n");
+                    serial++; // Increment the serial number
+                }
             }
         }
+
+        break;
     }
 
-    break;
-}
-
-case 5:
-{
-    // Filter by Category
-    char category[20];
-    printf("Enter category to filter tasks: ");
-    scanf("%19s", category);
-
-    system("color 0F");  // Change text to bright white and background to black
-
-    printf("**********************************************************************************************************************************************\n");
-    printf("*   Serial No |   Task Name                  |   %% Complete  |   Completed  |   Priority   |   Due Date  |  Due Time  |    Category          *\n");
-    printf("**********************************************************************************************************************************************\n");
-
-    struct Task task;
-
-    while(fgets(line, sizeof(line), file) != NULL)
+    case 5:
     {
-        if(sscanf(line, "Task Name: %19s", task.taskname) == 1)
+        // Filter by Category
+        char category[20];
+        printf("Enter category to filter tasks: ");
+        scanf("%19s", category);
+
+        system("color 0F");  // Change text to bright white and background to black
+
+        printf("**********************************************************************************************************************************************\n");
+        printf("*   Serial No |   Task Name                  |   %% Complete  |   Completed  |   Priority   |   Due Date  |  Due Time  |    Category          *\n");
+        printf("**********************************************************************************************************************************************\n");
+
+        struct Task task;
+
+        while(fgets(line, sizeof(line), file) != NULL)
         {
-            // Successfully read the task name, now process the rest of the data
-            fgets(line, sizeof(line), file); // Read the description line
-            sscanf(line, "Description: %499[^\n]", task.description); // Read the description
-
-            fgets(line, sizeof(line), file); // Read the next line
-            sscanf(line, "Completion Percentage: %d", &task.percent_complete);
-
-            fgets(line, sizeof(line), file);
-            sscanf(line, "Completed: %d", &task.completed);
-
-            fgets(line, sizeof(line), file);
-            sscanf(line, "Priority: %d", &task.priority);
-
-            fgets(line, sizeof(line), file);
-            sscanf(line, "Last Date: %d", &task.lastDate);
-
-            fgets(line, sizeof(line), file);
-            sscanf(line, "Last Time: %d", &task.time);
-
-            fgets(line, sizeof(line), file);
-            sscanf(line, "Category: %19s", task.category);
-
-            fgets(line, sizeof(line), file);
-
-            if(strcmp(task.category, category) == 0)
+            if(sscanf(line, "Task Name: %19s", task.taskname) == 1)
             {
-                printf("* %10d  | %-28s | %11d%%  | %-11s  | %11d  | %10d  | %9d  | %-20s *\n",serial, task.taskname, task.percent_complete, task.completed ? "Yes" : "No",task.priority, task.lastDate, task.time, task.category);
-                printf("**********************************************************************************************************************************************\n");
-                serial++; // Increment the serial number
+                // Successfully read the task name, now process the rest of the data
+                fgets(line, sizeof(line), file); // Read the description line
+                sscanf(line, "Description: %499[^\n]", task.description); // Read the description
+
+                fgets(line, sizeof(line), file); // Read the next line
+                sscanf(line, "Completion Percentage: %d", &task.percent_complete);
+
+                fgets(line, sizeof(line), file);
+                sscanf(line, "Completed: %d", &task.completed);
+
+                fgets(line, sizeof(line), file);
+                sscanf(line, "Priority: %d", &task.priority);
+
+                fgets(line, sizeof(line), file);
+                sscanf(line, "Last Date: %d", &task.lastDate);
+
+                fgets(line, sizeof(line), file);
+                sscanf(line, "Last Time: %d", &task.time);
+
+                fgets(line, sizeof(line), file);
+                sscanf(line, "Category: %19s", task.category);
+
+                fgets(line, sizeof(line), file);
+
+                if(strcmp(task.category, category) == 0)
+                {
+                    printf("* %10d  | %-28s | %11d%%  | %-11s  | %11d  | %10d  | %9d  | %-20s *\n",serial, task.taskname, task.percent_complete, task.completed ? "Yes" : "No",task.priority, task.lastDate, task.time, task.category);
+                    printf("**********************************************************************************************************************************************\n");
+                    serial++; // Increment the serial number
+                }
             }
         }
-    }
 
-    break;
-}
+        break;
+    }
 
    default:
         printf("Invalid choice. Please enter a number between 0 and 5.\n");
