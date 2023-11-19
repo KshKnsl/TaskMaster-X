@@ -1,8 +1,0 @@
-Task Name: PhysicsWork
-Description: CollegeAssignment
-Completion Percentage: 25
-Completed: 0
-Priority: 2
-Last Date: 0654
-Last Time: 0296
-Category: Assignment
