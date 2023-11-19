@@ -96,89 +96,87 @@ void homePage()
     }
 }
 
+// Function to display an exit confirmation screen
 void escape()
 {
+    // asks user for exit confirmation
+    printf("\nAre you sure you want to exit?(YES/NO)---");
+    char ch;
+    
+    // Read the user's choice (consume newline characters)
+    scanf("%c", &ch);
 
-  printf("\nAre you sure you want to exit?(YES/NO)---");
-  char ch;
-  scanf("%c",&ch);
-  scanf("%c",&ch);
-
-  if(ch=='Y'||ch=='y')
-  {
-    system("cls");
-    system("color 3E");
-    printf("\n\t\t\t\t\t\t  ________________________________________________________________________");
-    printf("\n\t\t\t\t\t\t||                                                                        ||");
-    printf("\n\t\t\t\t\t\t|| ---------- |     |    /\\    |\\    | |  /      \\     / |=====| |    |   ||");
-    printf("\n\t\t\t\t\t\t||     ||     |     |   /  \\   | \\   | | /        \\   /  |     | |    |   ||");
-    printf("\n\t\t\t\t\t\t||     ||     |=====|  /====\\  |  \\  | |/          \\=/   |     | |    |   ||");
-    printf("\n\t\t\t\t\t\t||     ||     |     | /      \\ |   \\ | |\\           |    |     | |    |   ||");
-    printf("\n\t\t\t\t\t\t||     ||     |     |/        \\|    \\| | \\          |    |=====| |====|   ||");
-    printf("\n\t\t\t\t\t\t||________________________________________________________________________||\n");
-    sleep(2);
-    system("cls");
-    printf("\n\n");
-
-    system("color 2E");
-    int choice=1;
-    printf("Would you like to provide feedback? (1: Yes, 2: No): ");
-    fflush(stdin);
-    scanf("%d",&choice);
-
-    if(choice == 1)
+    // Check if the user chose to exit
+    if(ch == 'Y' || ch == 'y')
     {
-        // Feedback form
-        char feedback[1000];
-        printf("\nPlease provide your feedback (up to 999 characters):\n");
+       
+        system("cls");
+        system("color 3E");
+          printf("\n\t\t\t\t\t\t  ________________________________________________________________________");
+          printf("\n\t\t\t\t\t\t||                                                                        ||");
+          printf("\n\t\t\t\t\t\t|| ---------- |     |    /\\    |\\    | |  /      \\     / |=====| |    |   ||");
+          printf("\n\t\t\t\t\t\t||     ||     |     |   /  \\   | \\   | | /        \\   /  |     | |    |   ||");
+          printf("\n\t\t\t\t\t\t||     ||     |=====|  /====\\  |  \\  | |/          \\=/   |     | |    |   ||");
+          printf("\n\t\t\t\t\t\t||     ||     |     | /      \\ |   \\ | |\\           |    |     | |    |   ||");
+          printf("\n\t\t\t\t\t\t||     ||     |     |/        \\|    \\| | \\          |    |=====| |====|   ||");
+          printf("\n\t\t\t\t\t\t||________________________________________________________________________||\n");
+        
+
+        // Pause for 2 seconds
+        sleep(2);
+        system("cls");
+
+        // Display a feedback prompt
+        printf("\n\n");
+        system("color 2E");
+        int choice = 1;
+        printf("Would you like to provide feedback? (1: Yes, 2: No): ");
         fflush(stdin);
-        fgets(feedback, sizeof(feedback), stdin);
+        scanf("%d", &choice);
 
-        // Save the feedback to a file
-        size_t feedback_length = strlen(feedback);
-        if(feedback_length > 0 && feedback[feedback_length - 1] == '\n')
+        // If the user chooses to provide feedback
+        if(choice == 1)
         {
-            feedback[feedback_length - 1] = '\0';
+            // Feedback form
+            char feedback[1000];
+            printf("\nPlease provide your feedback (up to 999 characters):\n");
+            fflush(stdin);
+            fgets(feedback, sizeof(feedback), stdin);
+            // Saves the feedback to a file
+
+            // Prompt the user to rate the program
+            printf("\nRATE US NOW!!\n");
+            printf("1. *\n");
+            printf("2. **\n");
+            printf("3. ***\n");
+            printf("4. ****\n");
+            printf("5. *****\n");
+            int rate;
+            scanf("%d", &rate);
         }
 
-        FILE *feedbackFile = fopen("Program Data/feedback.txt", "a");
-        if(feedbackFile == NULL)
-        {
-            printf("Error saving feedback. Please try again later.\n");
-        }
-        else
-        {
-            fprintf(feedbackFile,"\n%s\n",feedback);
-            fclose(feedbackFile);
-            printf("Thank you for your feedback! It has been saved in feedback.txt.\n");
-        }
-
-        printf("\nRATE US NOW!!\n");
-        printf("1. *\n");
-        printf("2. **\n");
-        printf("3. ***\n");
-        printf("4. ****\n");
-        printf("5. *****\n");
-        int rate;
-        scanf("%d",&rate);
+        // Display a goodbye message
+        printf("\nGoodbye! Have a great day!\n");
+        // Pause for 2 seconds
+        sleep(2);
+        // Clears the screen
+        system("cls");
+        // Exit the program
+        exit(0);
     }
-
-    printf("\nGoodbye! Have a great day!\n");
-    sleep(2);
-    system("cls");
-    exit(0);
-  }
 
   else
   {
+      // If the user chooses not to exit, it goes back to the home page
     homePage();
   }
   return;
 }
 
+// Function to display the main menu and get user choice
 int mainMenu()
 {
-    //This function is used to print the Menu of the Todo list and returns a choice entered by the user.
+    //This function is used to print the Menu of the Todo list and it returns a choice entered by the user.
     int choice;
 
     system("cls");
