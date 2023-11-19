@@ -139,14 +139,14 @@ void escape()
             feedback[feedback_length - 1] = '\0';
         }
 
-        FILE *feedbackFile = fopen("feedback.txt", "a");
+        FILE *feedbackFile = fopen("Program Data/feedback.txt", "a");
         if(feedbackFile == NULL)
         {
             printf("Error saving feedback. Please try again later.\n");
         }
         else
         {
-            fprintf(feedbackFile,"%s\n",feedback);
+            fprintf(feedbackFile,"\n%s\n",feedback);
             fclose(feedbackFile);
             printf("Thank you for your feedback! It has been saved in feedback.txt.\n");
         }
@@ -156,7 +156,7 @@ void escape()
         printf("2. **\n");
         printf("3. ***\n");
         printf("4. ****\n");
-        printf("5. *****\n");           
+        printf("5. *****\n");
         int rate;
         scanf("%d",&rate);
     }
@@ -206,7 +206,7 @@ int mainMenu()
 
 void writeCredentialsToFile(long loginID, long Password)
 {
-    FILE *file=fopen("Credentials.txt","a");
+    FILE *file=fopen("Program Data/Credentials.txt","a");
     if(file==NULL)
     {
         printf("Error opening the file for writing.\n");
@@ -220,7 +220,7 @@ void writeCredentialsToFile(long loginID, long Password)
 
 bool readCredentialsFromFile(long loginID, long Password)
 {
-    FILE *file = fopen("Credentials.txt","r");
+    FILE *file = fopen("Program Data/Credentials.txt","r");
     long storedLoginID, storedPassword;
     bool found = false;
     char line[100];
@@ -305,7 +305,7 @@ void createAccount()
         printf("\nInvalid Name. Please use only letters and spaces.Retry.....");
         goto retry1;
     }
-    
+
     retry2:
     printf("Enter your date of birth (format DDMMYY): ");
     scanf("%d", &dob);
@@ -352,7 +352,7 @@ bool validate(int dob)
     {
          return false;
     }
-    
+
     if((month==2&&day>29)||((month==4||month==6||month==9||month==11)&&day>30))
     {
         return false;
@@ -377,11 +377,11 @@ bool validateName(char* name)
 
 bool loginIDExists(long loginID)
 {
-    FILE *file = fopen("Credentials.txt","r");
+    FILE *file = fopen("Program Data/Credentials.txt","r");
     long storedLoginID, storedPassword;
     bool found=false;
     char line[100];
-    
+
     while(fgets(line,sizeof(line),file)!=NULL)
     {
         sscanf(line,"%ld,%ld",&storedLoginID,&storedPassword);
@@ -446,7 +446,7 @@ int seeToDoList(struct Credentials user)
 {
     int serial=0;
     char filename[20];
-    sprintf(filename, "%ld.txt", user.loginID); // Generate the file's name based on the user's loginID
+    sprintf(filename, "Program Data/%ld.txt", user.loginID); // Generate the file's name based on the user's loginID
     system("cls");
     system("color 5a");
     FILE *file =fopen(filename,"r");
@@ -515,7 +515,7 @@ void addTask(struct Credentials user)
     printf("********************************************************************\n");
 
     char fileName[50];
-    sprintf(fileName, "%ld.txt", user.loginID); // Generate the file's name based on the user's loginID
+    sprintf(fileName, "Program Data/%ld.txt", user.loginID); // Generate the file's name based on the user's loginID
 
     FILE *file = fopen(fileName, "a"); // Open file in append mode
     if(file==NULL)
@@ -534,8 +534,14 @@ void addTask(struct Credentials user)
     printf("Enter task completion percentage: ");
     scanf("%d", &newTask.percent_complete);
 
-    newTask.completed = false; // Initialize to false
-
+    if(newTask.percent_complete<100)
+    {
+        newTask.completed = false; // Initialize to false
+    }
+    else
+    {
+        newTask.completed = true;
+    }
     printf("Enter task priority (1-5): ");
     scanf("%d", &newTask.priority);
 
@@ -570,7 +576,7 @@ void updateToDoList(struct Credentials user)
     printf("********************************************************************\n");
 
     char filename[20];
-    sprintf(filename, "%ld.txt", user.loginID);
+    sprintf(filename, "Program Data/%ld.txt", user.loginID);
 
     FILE *file = fopen(filename, "r");
     if(file==NULL)
@@ -595,7 +601,7 @@ void updateToDoList(struct Credentials user)
     char line[1000];
     int serial = 1;
 
-    FILE *tempFile = fopen("temp.txt", "w");
+    FILE *tempFile = fopen("Program Data/temp.txt", "w");
     if(tempFile==NULL)
     {
         printf("Error creating the temporary file.\n");
@@ -607,7 +613,7 @@ void updateToDoList(struct Credentials user)
     {
         int percent;
         bool completed;
-        
+
         if(strstr(line, "Completion Percentage")!=NULL)
         {
             int percent;
@@ -615,10 +621,10 @@ void updateToDoList(struct Credentials user)
             {
                 printf("Enter updated completion percentage: ");
                 scanf("%d", &percent);
-        
+
                 fprintf(tempFile, "Completion Percentage: %d\n",percent);
                 printf("To-Do List updated successfully.\n");
-        
+
                 if(percent>=100)
                 {
                     completed=true;
@@ -657,7 +663,7 @@ void updateToDoList(struct Credentials user)
         return;
     }
 
-    tempFile = fopen("temp.txt", "r");
+    tempFile = fopen("Program Data/temp.txt", "r");
 
     if(tempFile==NULL)
     {
@@ -683,10 +689,10 @@ void deleteToDoList(struct Credentials user)
     printf("********************************************************************\n");
     printf("*                   Delete To-Do List                              *\n");
     printf("********************************************************************\n");
-    
+
     char filename[20];
     char line[1000];
-    sprintf(filename, "%ld.txt", user.loginID);
+    sprintf(filename, "Program Data/%ld.txt", user.loginID);
     sleep(1);
 
     int taskNumber=seeToDoList(user);
@@ -694,14 +700,14 @@ void deleteToDoList(struct Credentials user)
     char task[100];
 
     FILE *file = fopen(filename, "r");
-    if(file == NULL) 
+    if(file == NULL)
     {
         printf("Error opening file!\n");
         return ;
     }
-    
-    FILE *tempFile = fopen("temp.txt", "w");
-    if(tempFile == NULL) 
+
+    FILE *tempFile = fopen("Program Data/temp.txt", "w");
+    if(tempFile == NULL)
     {
         printf("Error opening file!\n");
         fclose(file);
@@ -737,20 +743,14 @@ void deleteToDoList(struct Credentials user)
         }
         else    fprintf(tempFile, "%s", line);
     }
-    printf("Task deleted successfully.\n");
- 
+
     fclose(file);
     fclose(tempFile);
-    remove("filename.txt");
-    rename("temp.txt", "filename.txt");
-
     printf("Task deleted successfully.\n");
-    // Implement code to delete the user's To-Do List
-    printf("To-Do List deleted successfully.\n");
     sleep(2);
 }
-   
-void editTasks(struct Credentials user) 
+
+void editTasks(struct Credentials user)
 {
     system("cls");
     printf("********************************************************************\n");
@@ -759,11 +759,11 @@ void editTasks(struct Credentials user)
 
     char filename[20];
     char line[1000];
-    sprintf(filename, "%ld.txt", user.loginID);
+    sprintf(filename, "Program Data/%ld.txt", user.loginID);
     sleep(1);
 
     FILE *file = fopen(filename, "r");
-    if(file == NULL) 
+    if(file == NULL)
     {
         printf("Error opening the original file.\n");
         return;
@@ -772,8 +772,8 @@ void editTasks(struct Credentials user)
     int taskNumber=seeToDoList(user);
     int taskChoice,currentTask= 0;
 
-    FILE *edit = fopen("edit.txt", "w");
-    if(edit == NULL) 
+    FILE *edit = fopen("Program Data/edit.txt", "w");
+    if(edit == NULL)
     {
         printf("Error creating the editable file.\n");
         fclose(file);
@@ -789,7 +789,7 @@ void editTasks(struct Credentials user)
         fclose(edit);
         return;
     }
-    
+
     printf("Enter what you want to edit in the selected task: \n");
     printf("1.) Task name\n");
     printf("2.) Task description\n");
@@ -800,20 +800,20 @@ void editTasks(struct Credentials user)
     printf("0.) Exit\n");
     printf("Enter your choice : ");
     int z;
-    scanf("%d", &z);            
+    scanf("%d", &z);
     while(fgets(line, sizeof(line), file) != NULL)
     {
         if(strstr(line, "Task Name:")!=NULL)
         {
             currentTask++;
-            if(currentTask == taskChoice) 
+            if(currentTask == taskChoice)
             {
-                switch(z) 
+                switch(z)
                 {
                     case 0:
                         escape();
                         break;
-    
+
                     case 1:
                     {
                         char newTaskName[20];
@@ -845,7 +845,7 @@ void editTasks(struct Credentials user)
                         scanf("%d", &newPriority);
                         fprintf(edit, "Priority: %d\n", newPriority);
                         break;
-    
+
                     case 4:
                         fprintf(edit, "%s", line);
                         fgets(line, sizeof(line),file);
@@ -857,7 +857,7 @@ void editTasks(struct Credentials user)
                         fgets(line, sizeof(line),file);
                         fprintf(edit, "%s", line);
                         fgets(line, sizeof(line),file);
-                        
+
                         int newLastDate;
                         printf("Enter the new last date for the task: ");
                         scanf("%d", &newLastDate);
@@ -877,7 +877,7 @@ void editTasks(struct Credentials user)
                         fgets(line, sizeof(line),file);
                         fprintf(edit, "%s", line);
                         fgets(line, sizeof(line),file);
-                        
+
                         int newLastTime;
                         printf("Enter the new last time for the task: ");
                         scanf("%d", &newLastTime);
@@ -899,33 +899,33 @@ void editTasks(struct Credentials user)
                         fgets(line, sizeof(line),file);
                         fprintf(edit, "%s", line);
                         fgets(line, sizeof(line),file);
-                        
+
                         char newCategory[20];
                         printf("Enter the new task category (up to 19 characters): ");
                         scanf("%19s", newCategory);
                         fprintf(edit, "Category: %s\n", newCategory);
                         break;
-    
+
                     default:
                         printf("Invalid option.\n");
                         sleep(2);
                         taskManager(user,mainMenu());
                 }
-            } 
-            else 
+            }
+            else
             {
                 fprintf(edit, "%s", line);
             }
         }
-        else 
+        else
         {
             fprintf(edit, "%s", line);
         }
     }
-    
+
     fclose(file);
     fclose(edit);
-   
+
     //Reopen the file
     file = fopen(filename, "w");
     if(file == NULL)
@@ -934,7 +934,7 @@ void editTasks(struct Credentials user)
         return;
     }
 
-    edit = fopen("edit.txt", "r");
+    edit = fopen("Program Data/edit.txt", "r");
 
     if(edit == NULL)
     {
@@ -948,6 +948,8 @@ void editTasks(struct Credentials user)
         fprintf(file, "%s", line);
     }
 
+    fclose(file);
+    fclose(edit);
     printf("Task editing complete.\n");
 }
 
@@ -959,7 +961,7 @@ void filterToDoList(struct Credentials user)
     printf("********************************************************************\n");
     printf("*                    Filter To-Do List                            *\n");
     printf("********************************************************************\n");
-    
+
     Retry:
     printf("Filter Options:\n");
     printf("1. Show Only Completed Tasks\n");
@@ -974,7 +976,7 @@ void filterToDoList(struct Credentials user)
     scanf("%d", &filterChoice);
 
     char filename[20];
-    sprintf(filename, "%ld.txt", user.loginID);
+    sprintf(filename, "Program Data/%ld.txt", user.loginID);
     FILE *file = fopen(filename, "r");
 
     if(file == NULL)
@@ -982,7 +984,7 @@ void filterToDoList(struct Credentials user)
         printf("Error opening file!\n");
         return;
     }
-    
+
     int serial = 1;
     char line[1000];
 
@@ -991,7 +993,7 @@ void filterToDoList(struct Credentials user)
     case 0:
         fclose(file);
         system("color 07");
-        return;
+        taskManager(user,mainMenu());
 
     case 1:
     {
@@ -1078,9 +1080,9 @@ void filterToDoList(struct Credentials user)
 
                 fgets(line, sizeof(line), file);
                 sscanf(line, "Category: %19s", task.category);
-             
+
                 fgets(line, sizeof(line), file);
-              
+
                 if(!task.completed)
                 {
                     printf("* %10d  | %-28s | %11d%%  | %-11s  | %11d  | %10d  | %9d  | %-20s *\n",serial, task.taskname, task.percent_complete, task.completed ? "Yes" : "No",task.priority, task.lastDate, task.time, task.category);
@@ -1148,114 +1150,114 @@ void filterToDoList(struct Credentials user)
         break;
     }
     case 4:
-{
+    {
     // Filter by Last Date
-    int lastDate;
-    printf("Enter last date to filter tasks: ");
-    scanf("%d", &lastDate);
+        int lastDate;
+        printf("Enter last date to filter tasks: ");
+        scanf("%d", &lastDate);
 
-    system("color 0D");  // Change text to light purple and background to black
+        system("color 0D");  // Change text to light purple and background to black
 
-    printf("**********************************************************************************************************************************************\n");
-    printf("*   Serial No |   Task Name                  |   %% Complete  |   Completed  |   Priority   |   Due Date  |  Due Time  |    Category          *\n");
-    printf("**********************************************************************************************************************************************\n");
+        printf("**********************************************************************************************************************************************\n");
+        printf("*   Serial No |   Task Name                  |   %% Complete  |   Completed  |   Priority   |   Due Date  |  Due Time  |    Category          *\n");
+        printf("**********************************************************************************************************************************************\n");
 
-    struct Task task;
+        struct Task task;
 
-    while(fgets(line, sizeof(line), file) != NULL)
-    {
-        if(sscanf(line, "Task Name: %19s", task.taskname) == 1)
+        while(fgets(line, sizeof(line), file) != NULL)
         {
-            // Successfully read the task name, now process the rest of the data
-            fgets(line, sizeof(line), file); // Read the description line
-            sscanf(line, "Description: %499[^\n]", task.description); // Read the description
-
-            fgets(line, sizeof(line), file); // Read the next line
-            sscanf(line, "Completion Percentage: %d", &task.percent_complete);
-
-            fgets(line, sizeof(line), file);
-            sscanf(line, "Completed: %d", &task.completed);
-
-            fgets(line, sizeof(line), file);
-            sscanf(line, "Priority: %d", &task.priority);
-
-            fgets(line, sizeof(line), file);
-            sscanf(line, "Last Date: %d", &task.lastDate);
-
-            fgets(line, sizeof(line), file);
-            sscanf(line, "Last Time: %d", &task.time);
-
-            fgets(line, sizeof(line), file);
-            sscanf(line, "Category: %19s", task.category);
-
-            fgets(line, sizeof(line), file);
-
-            if(task.lastDate == lastDate)
+            if(sscanf(line, "Task Name: %19s", task.taskname) == 1)
             {
-                printf("* %10d  | %-28s | %11d%%  | %-11s  | %11d  | %10d  | %9d  | %-20s *\n",serial, task.taskname, task.percent_complete, task.completed ? "Yes" : "No",task.priority, task.lastDate, task.time, task.category);
-                printf("**********************************************************************************************************************************************\n");
-                serial++; // Increment the serial number
+                // Successfully read the task name, now process the rest of the data
+                fgets(line, sizeof(line), file); // Read the description line
+                sscanf(line, "Description: %499[^\n]", task.description); // Read the description
+
+                fgets(line, sizeof(line), file); // Read the next line
+                sscanf(line, "Completion Percentage: %d", &task.percent_complete);
+
+                fgets(line, sizeof(line), file);
+                sscanf(line, "Completed: %d", &task.completed);
+
+                fgets(line, sizeof(line), file);
+                sscanf(line, "Priority: %d", &task.priority);
+
+                fgets(line, sizeof(line), file);
+                sscanf(line, "Last Date: %d", &task.lastDate);
+
+                fgets(line, sizeof(line), file);
+                sscanf(line, "Last Time: %d", &task.time);
+
+                fgets(line, sizeof(line), file);
+                sscanf(line, "Category: %19s", task.category);
+
+                fgets(line, sizeof(line), file);
+
+                if(task.lastDate == lastDate)
+                {
+                    printf("* %10d  | %-28s | %11d%%  | %-11s  | %11d  | %10d  | %9d  | %-20s *\n",serial, task.taskname, task.percent_complete, task.completed ? "Yes" : "No",task.priority, task.lastDate, task.time, task.category);
+                    printf("**********************************************************************************************************************************************\n");
+                    serial++; // Increment the serial number
+                }
             }
         }
+
+        break;
     }
 
-    break;
-}
-
-case 5:
-{
-    // Filter by Category
-    char category[20];
-    printf("Enter category to filter tasks: ");
-    scanf("%19s", category);
-
-    system("color 0F");  // Change text to bright white and background to black
-
-    printf("**********************************************************************************************************************************************\n");
-    printf("*   Serial No |   Task Name                  |   %% Complete  |   Completed  |   Priority   |   Due Date  |  Due Time  |    Category          *\n");
-    printf("**********************************************************************************************************************************************\n");
-
-    struct Task task;
-
-    while(fgets(line, sizeof(line), file) != NULL)
+    case 5:
     {
-        if(sscanf(line, "Task Name: %19s", task.taskname) == 1)
+        // Filter by Category
+        char category[20];
+        printf("Enter category to filter tasks: ");
+        scanf("%19s", category);
+
+        system("color 0F");  // Change text to bright white and background to black
+
+        printf("**********************************************************************************************************************************************\n");
+        printf("*   Serial No |   Task Name                  |   %% Complete  |   Completed  |   Priority   |   Due Date  |  Due Time  |    Category          *\n");
+        printf("**********************************************************************************************************************************************\n");
+
+        struct Task task;
+
+        while(fgets(line, sizeof(line), file) != NULL)
         {
-            // Successfully read the task name, now process the rest of the data
-            fgets(line, sizeof(line), file); // Read the description line
-            sscanf(line, "Description: %499[^\n]", task.description); // Read the description
-
-            fgets(line, sizeof(line), file); // Read the next line
-            sscanf(line, "Completion Percentage: %d", &task.percent_complete);
-
-            fgets(line, sizeof(line), file);
-            sscanf(line, "Completed: %d", &task.completed);
-
-            fgets(line, sizeof(line), file);
-            sscanf(line, "Priority: %d", &task.priority);
-
-            fgets(line, sizeof(line), file);
-            sscanf(line, "Last Date: %d", &task.lastDate);
-
-            fgets(line, sizeof(line), file);
-            sscanf(line, "Last Time: %d", &task.time);
-
-            fgets(line, sizeof(line), file);
-            sscanf(line, "Category: %19s", task.category);
-
-            fgets(line, sizeof(line), file);
-
-            if(strcmp(task.category, category) == 0)
+            if(sscanf(line, "Task Name: %19s", task.taskname) == 1)
             {
-                printf("* %10d  | %-28s | %11d%%  | %-11s  | %11d  | %10d  | %9d  | %-20s *\n",serial, task.taskname, task.percent_complete, task.completed ? "Yes" : "No",task.priority, task.lastDate, task.time, task.category);
-                printf("**********************************************************************************************************************************************\n");
-                serial++; // Increment the serial number
+                // Successfully read the task name, now process the rest of the data
+                fgets(line, sizeof(line), file); // Read the description line
+                sscanf(line, "Description: %499[^\n]", task.description); // Read the description
+
+                fgets(line, sizeof(line), file); // Read the next line
+                sscanf(line, "Completion Percentage: %d", &task.percent_complete);
+
+                fgets(line, sizeof(line), file);
+                sscanf(line, "Completed: %d", &task.completed);
+
+                fgets(line, sizeof(line), file);
+                sscanf(line, "Priority: %d", &task.priority);
+
+                fgets(line, sizeof(line), file);
+                sscanf(line, "Last Date: %d", &task.lastDate);
+
+                fgets(line, sizeof(line), file);
+                sscanf(line, "Last Time: %d", &task.time);
+
+                fgets(line, sizeof(line), file);
+                sscanf(line, "Category: %19s", task.category);
+
+                fgets(line, sizeof(line), file);
+
+                if(strcmp(task.category, category) == 0)
+                {
+                    printf("* %10d  | %-28s | %11d%%  | %-11s  | %11d  | %10d  | %9d  | %-20s *\n",serial, task.taskname, task.percent_complete, task.completed ? "Yes" : "No",task.priority, task.lastDate, task.time, task.category);
+                    printf("**********************************************************************************************************************************************\n");
+                    serial++; // Increment the serial number
+                }
             }
         }
-    }
 
-    break;
-}
+        break;
+    }
 
    default:
         printf("Invalid choice. Please enter a number between 0 and 5.\n");
