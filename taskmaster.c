@@ -70,9 +70,9 @@ void homePage()
     printf("||      \\/      \\/    |===== |_____ |====== \\=====/ |      | |=====    ||\n");
     printf("||                           TO TaskMaster X                           ||\n");
     printf("||     MENU:-                                                          ||\n");
-    printf("||   1. Login                                                           ||\n");
-    printf("||   2. Create a new account                                            ||\n");
-    printf("||   3. CLOSE TASKMASTER X                                              ||\n");
+    printf("||   1. Login                                                          ||\n");
+    printf("||   2. Create a new account                                           ||\n");
+    printf("||   3. CLOSE TASKMASTER X                                             ||\n");
     printf("||_____________________________________________________________________||\n");
     printf("ENTER YOUR CHOICE: ");
     scanf("%d", &choice);
@@ -105,6 +105,7 @@ void escape()
     
     // Read the user's choice (consume newline characters)
     scanf("%c", &ch);
+    scanf("%c",&ch);
 
     // Check if the user chose to exit
     if(ch == 'Y' || ch == 'y')
