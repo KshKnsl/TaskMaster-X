@@ -224,13 +224,17 @@ int mainMenu()
 
 void writeCredentialsToFile(long loginID, long Password)
 {
+    // Open file for appending in the "Program Data" directory
     FILE *file=fopen("Program Data/Credentials.txt","a");
+
     if(file==NULL)
     {
         printf("Error opening the file for writing.\n");
         return;
     }
+    // Write login credentials in the following format "loginID,Password"
     fprintf(file,"%ld,%ld\n",loginID,Password);
+     // Flush here ensures immediate writing to the file
     fflush(file);
     fclose(file);
 }
@@ -238,67 +242,112 @@ void writeCredentialsToFile(long loginID, long Password)
 
 bool readCredentialsFromFile(long loginID, long Password)
 {
+    // Open file for reading in the "Program Data" directory
     FILE *file = fopen("Program Data/Credentials.txt","r");
+     // Variables to store login credentials read from the file
     long storedLoginID, storedPassword;
+    // Flag here indicate whether matching credentials are found
     bool found = false;
     char line[100];
+
+     // Read each line in the file
     while(fgets(line,sizeof(line),file)!=NULL)
     {
+         // Extract stored loginID and Password from the line
         sscanf(line,"%ld,%ld",&storedLoginID,&storedPassword);
+        // Check if entered credentials match the stored credentials
         if(loginID==storedLoginID&&Password==storedPassword)
-        {
+        {  //sets the found flag to be true and exits the loop
             found=true;
             break;
         }
     }
     fclose(file);
+      // Return true if matching credentials are found, false otherwise
     return found;
 }
 
+// Function to  make use of login process
 void login()
 {
+    // Pause for 2 seconds, clear screen, and set console text color
     sleep(2);
     system("cls");
     system("color E1");
+
+    // Structure to store user credentials
     struct Credentials user;
+
+    // Display login header
     printf("**************************************\n");
     printf("*                 Login              *\n");
     printf("**************************************\n");
+
+    // Prompt user for login ID and password
     printf("Enter your Login ID: ");
     scanf("%ld", &user.loginID);
     printf("Enter your Password: ");
     scanf("%ld", &user.Password);
-    if(readCredentialsFromFile(user.loginID, user.Password))
+
+    // Checks the entered credentials match those in the file
+    if (readCredentialsFromFile(user.loginID, user.Password))
     {
+        // Displays successful login message
         printf("**************************************\n");
         printf("*          Login Successful          *\n");
         printf("**************************************\n");
         printf("\nMAIN MENU Loading.....\n");
+
+        // Pause for 5 seconds
         sleep(5);
+
+        // Gets user choice from the main menu
         int choice = mainMenu();
-        taskManager(user,choice);
+
+        // Redirects to the task manager with user credentials and choice
+        taskManager(user, choice);
     }
     else
     {
+        // Display login failure message and provide options
         printf("Login failed. Please check your credentials or create a new account.\n");
+        
+        // Label for the retry options
         DEFAULT:
+
+        // Display options for the user
         printf("Options:\n1.Create a new account\n2.Return to Home page\n3.Retry\n4.Exit\n");
         printf("Enter your choice  :  ");
+
         int choice;
-        scanf("%d",&choice);
-        switch(choice)
+
+        // Read user choice
+        scanf("%d", &choice);
+
+        // Switch statement to handle user choices
+        switch (choice)
         {
-            case 1 :    createAccount();    break;
-            case 2 :    homePage();         break;
-            case 3 :    login();            break;
-            case 4 :    escape();           break;
-            default :   goto DEFAULT;
+            case 1:    
+                createAccount();
+                break;
+            case 2:    
+                homePage();
+                break;
+            case 3:   
+                login();
+                break;
+            case 4:  
+                escape();
+                break;
+            default:   
+                goto DEFAULT;
         }
     }
 }
 
+// Function to create a new user account
 void createAccount()
-{
+{   //variables stores user info
     char name[50];
     int dob = 0;
     struct Credentials newUser;
@@ -306,6 +355,8 @@ void createAccount()
     system("cls");
     system("color 2f");
     struct Credentials user;
+
+   // Display create account header
     printf("**************************************\n");
     printf("*         CREATE AN ACCOUNT          *\n");
     printf("**************************************\n");
@@ -313,23 +364,28 @@ void createAccount()
     retry1:
     printf("Enter your first name: ");
     scanf("%49s", name);
+     // Validate the entered name
     if(validateName(name))
-    {
+    {   
+         // Copy validated name to the newUser structure
          strcpy(newUser.name,name);
          printf("----------Name Validated Successfully----------- \n");
     }
     else
-    {
+    {   // Display error message for an invalid name and retry
         printf("\nInvalid Name. Please use only letters and spaces.Retry.....");
         goto retry1;
     }
-
+    
+     // Label for the date of birth validation retry
     retry2:
     printf("Enter your date of birth (format DDMMYY): ");
     scanf("%d", &dob);
-
+    
+     // Validate the entered date of birth
     if(!validate(dob))
-    {
+    {   
+         // Display error message for an invalid date of birth and retry
         printf("\nWrong Date of birth......Retry.....");
         goto retry2;
     }
@@ -343,20 +399,28 @@ void createAccount()
     {
         printf("Enter a new Login ID: ");
         scanf("%ld", &newLoginID);
+
+        // Check if the entered login ID already exists
         if(loginIDExists(newLoginID))
             printf("Login ID already exists. Please choose a different one.\n");
         else
         {
+             // Set the new login ID in the newUser structure and break the loop
             newUser.loginID = newLoginID;
             break;
         }
     }
     printf("Enter a new Password: ");
     scanf("%ld", &newUser.Password);
+
+     // Set the verified flag to true
     newUser.verified = true;
+    
+    // Write the new user credentials to the file
     writeCredentialsToFile(newUser.loginID, newUser.Password);
     printf("\nAccount created successfully!\n");
     printf("Now you will be guided to the login page.\nEnter your credentials there in order to LOGIN\n");
+    // Pause for 2 seconds and redirect to the login page
     sleep(2);
     login();
 }
