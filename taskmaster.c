@@ -601,7 +601,7 @@ int seeToDoList(struct Credentials user)
 
     }
 }
-
+// Function to add a new task in todo list
 void addTask(struct Credentials user)
 {
     system("cls");
@@ -618,8 +618,9 @@ void addTask(struct Credentials user)
         printf("Error opening file.\n");
         return;
     }
-
+ // Create a new Task structure to store task details
     struct Task newTask;
+    // Prompt the user to enter task details
     printf("Enter task name (up to 19 characters): ");
     scanf("%19s", newTask.taskname);
 
@@ -629,6 +630,7 @@ void addTask(struct Credentials user)
     printf("Enter task completion percentage: ");
     scanf("%d", &newTask.percent_complete);
 
+    // Determine task completion status based on percentage
     if(newTask.percent_complete<100)
     {
         newTask.completed = false; // Initialize to false
@@ -648,7 +650,8 @@ void addTask(struct Credentials user)
 
     printf("Enter task category (up to 19 characters): ");
     scanf("%19s", newTask.category);
-
+   
+     // Write task details to the file
     fprintf(file, "Task Name: %s\n", newTask.taskname);
     fprintf(file, "Description: %s\n", newTask.description);
     fprintf(file, "Completion Percentage: %d\n", newTask.percent_complete);
@@ -659,10 +662,12 @@ void addTask(struct Credentials user)
     fprintf(file, "Category: %s\n", newTask.category);
     fprintf(file, "\n");
     fclose(file);
+    //prints success message
     printf("Task added successfully.\n");
     sleep(2);
 }
 
+// Function to update the To-Do List for a given user
 void updateToDoList(struct Credentials user)
 {
     system("cls");
@@ -672,7 +677,7 @@ void updateToDoList(struct Credentials user)
 
     char filename[20];
     sprintf(filename, "Program Data/%ld.txt", user.loginID);
-
+   // Open the file in read mode
     FILE *file = fopen(filename, "r");
     if(file==NULL)
     {
@@ -680,12 +685,15 @@ void updateToDoList(struct Credentials user)
         return;
     }
     sleep(1);
+    // Display the current To-Do List and get the total number of tasks
     int taskNumber = seeToDoList(user);
     int taskChoice;
 
+      // Prompt the user to enter the task number to update
     printf("Enter the task number you want to update (0 to exit): ");
     scanf("%d", &taskChoice);
-
+  
+  // Checks if user enters a valid tasknumber
     if(taskChoice<=0||taskChoice>taskNumber)
     {
         printf("No task selected or invalid task number.\n");
@@ -696,6 +704,7 @@ void updateToDoList(struct Credentials user)
     char line[1000];
     int serial = 1;
 
+     // Open a temporary file for writing
     FILE *tempFile = fopen("Program Data/temp.txt", "w");
     if(tempFile==NULL)
     {
@@ -703,23 +712,26 @@ void updateToDoList(struct Credentials user)
         fclose(file);
         return;
     }
-
+  // Iterate through each line in the original file
     while(fgets(line, sizeof(line), file) != NULL)
     {
         int percent;
         bool completed;
-
+         // Check if the line contains "Completion Percentage"
         if(strstr(line, "Completion Percentage")!=NULL)
         {
             int percent;
+            // If the current line corresponds to the selected task
             if(serial==taskChoice)
             {
                 printf("Enter updated completion percentage: ");
                 scanf("%d", &percent);
-
+                
+                // Write the updated completion percentage to the temporary file
                 fprintf(tempFile, "Completion Percentage: %d\n",percent);
                 printf("To-Do List updated successfully.\n");
-
+               
+                // Determine the completion status based on the updated percentage
                 if(percent>=100)
                 {
                     completed=true;
@@ -735,13 +747,13 @@ void updateToDoList(struct Credentials user)
 
             }
             else
-            {
+            {   // If the line does not correspond to the selected task, copy it to the temporary file
                 fprintf(tempFile, "%s", line);
             }
             serial++;
         }
         else
-        {
+        {           // If the line does not contain "Completion Percentage," copy it to the temporary file
                     fprintf(tempFile, "%s", line);
         }
     }
@@ -750,14 +762,14 @@ void updateToDoList(struct Credentials user)
     fclose(file);
     fclose(tempFile);
 
-    //Reopen the file
+    //Reopen the original file for writing
     file = fopen(filename, "w");
     if(file==NULL)
     {
         printf("Error opening the file.\n");
         return;
     }
-
+       // Reopen the temporary file for reading
     tempFile = fopen("Program Data/temp.txt", "r");
 
     if(tempFile==NULL)
@@ -766,7 +778,7 @@ void updateToDoList(struct Credentials user)
         fclose(file);
         return;
     }
-
+ // Copy the contents of the temporary file to the original file
     while(fgets(line, sizeof(line), tempFile) != NULL)
     {
         fprintf(file, "%s", line);
