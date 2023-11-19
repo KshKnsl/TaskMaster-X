@@ -1,42 +1,43 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<stdbool.h>
-#include<conio.h>
 #include<string.h>
-#include<math.h>
 #include<unistd.h>
 
+// it Defines a structure for user credentials
 struct Credentials
 {
     long loginID;
-    long Password;
+    long Password;  
     bool verified;
     char name[50];
 };
 
+// Define a structure for tasks
 struct Task
 {
     char taskname[20];
     char description[500];
-    int  percent_complete;
+    int percent_complete;
     bool completed;
-    int  priority;//set priority on a scale of 1-5
-    int  lastDate;//last date to complete the task
-    int  time;//last time to complete the task
+    int priority;    // Set priority on a scale of 1-5
+    int lastDate;    // Last date to complete the task
+    int time;        // Last time to complete the task
     char category[20];
 };
 
+// Function declarations
 void escape();
 void login();
 void createAccount();
 void guest();
 void homePage();
-int  mainMenu();
+int mainMenu();
 bool validate(int dob);
-bool loginIDExists(long loginID) ;
-void taskManager(struct Credentials user,int choice);
+bool loginIDExists(long loginID);
+void taskManager(struct Credentials user, int choice);
 
-int  seeToDoList(struct Credentials user);
+int seeToDoList(struct Credentials user);
 void updateToDoList(struct Credentials user);
 void filterToDoList(struct Credentials user);
 void deleteToDoList(struct Credentials user);
@@ -46,15 +47,19 @@ void addTask(struct Credentials user);
 
 int main()
 {
-  homePage();
-  return 0;
+    homePage();
+    return 0;
 }
 
+// Function  displays the home page and take user input actions
 void homePage()
 {
     system("cls");
     system("color 17");
+
     int choice;
+
+    // Displaying the TaskMaster X logo and menu options
     printf("\n  _____________________________________________________________________\n");
     printf("||                                                                     ||\n");
     printf("||   \\      /\\      / |===== |      |====== /=====\\ |\\    /| |=====    ||\n");
@@ -63,14 +68,16 @@ void homePage()
     printf("||      \\/      \\/    |===== |_____ |====== \\=====/ |      | |=====    ||\n");
     printf("||                           TO TaskMaster X                           ||\n");
     printf("||     MENU:-                                                          ||\n");
-    printf("||   1.Login                                                           ||\n");
-    printf("||   2.Create a new account                                            ||\n");
-    printf("||   3.CLOSE TASKMASTER X                                              ||\n");
+    printf("||   1. Login                                                           ||\n");
+    printf("||   2. Create a new account                                            ||\n");
+    printf("||   3. CLOSE TASKMASTER X                                              ||\n");
     printf("||_____________________________________________________________________||\n");
-    printf("ENTER YOUR CHOICE::");
-    scanf("%d",&choice);
+    printf("ENTER YOUR CHOICE: ");
+    scanf("%d", &choice);
     printf("\nLoading.....\n");
     sleep(1);
+
+ // Switch case made to handle user choices
     switch(choice)
     {
         case 1:
