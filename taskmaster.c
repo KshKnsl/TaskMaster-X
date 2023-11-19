@@ -142,7 +142,25 @@ void escape()
             printf("\nPlease provide your feedback (up to 999 characters):\n");
             fflush(stdin);
             fgets(feedback, sizeof(feedback), stdin);
-            // Saves the feedback to a file
+
+         // Saves the feedback to a file
+        size_t feedback_length = strlen(feedback);
+        if(feedback_length > 0 && feedback[feedback_length - 1] == '\n')
+        {
+            feedback[feedback_length - 1] = '\0';
+        }
+
+        FILE *feedbackFile = fopen("Program Data/feedback.txt", "a");
+        if(feedbackFile == NULL)
+        {
+            printf("Error saving feedback. Please try again later.\n");
+        }
+        else
+        {
+            fprintf(feedbackFile,"\n%s\n",feedback);
+            fclose(feedbackFile);
+            printf("Thank you for your feedback! It has been saved in feedback.txt.\n");
+        }
 
             // Prompt the user to rate the program
             printf("\nRATE US NOW!!\n");
