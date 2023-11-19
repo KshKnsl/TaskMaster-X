@@ -3,6 +3,8 @@
 #include<stdbool.h>
 #include<string.h>
 #include<unistd.h>
+#include<conio.h>
+#include<math.h>
 
 // it Defines a structure for user credentials
 struct Credentials
