@@ -425,48 +425,57 @@ void createAccount()
     login();
 }
 
+// Function to validate date of birth
 bool validate(int dob)
-{
+{   //extracting day,month,year from dob
     int day=dob/10000;
     int month=(dob/100)%100;
     int year=dob%100;
+    // Checkinging for valid year, month, and day 
     if(year<0||year>99||month<1||month>12||day<1||day>31)
     {
          return false;
     }
-
+   // Checking for specific month-day combinations
     if((month==2&&day>29)||((month==4||month==6||month==9||month==11)&&day>30))
     {
-        return false;
+        return false; //invalid date
     }
-    return true;
+    return true;   // valid date
 }
 
-
+// Function to validate a name
 bool validateName(char* name)
 {
     int i;
+    // Checking if the name is not empty
     if(name[0]=='\0')
         return false;
+    // Iterating through each character in the name
     for(i=0;name[i]!='\0';i++)
     {
         char ch=name[i];
+        //checking character is uppercase and lowercase
         if(!((ch>='A'&&ch<='Z')||(ch>='a'&&ch<='z')||ch==' '))
             return false;
     }
     return true;
 }
 
+// Function to check if a login ID exists in the credentials file
 bool loginIDExists(long loginID)
 {
     FILE *file = fopen("Program Data/Credentials.txt","r");
     long storedLoginID, storedPassword;
     bool found=false;
     char line[100];
-
+   
+     // Reading each line from the file
     while(fgets(line,sizeof(line),file)!=NULL)
-    {
+    {   
+        // Extracting stored login ID and password from the line
         sscanf(line,"%ld,%ld",&storedLoginID,&storedPassword);
+        // Checking if the provided login ID matches any stored login ID
         if(loginID==storedLoginID)
         {
             found = true;
@@ -474,9 +483,10 @@ bool loginIDExists(long loginID)
         }
     }
     fclose(file);
-    return found;
+    return found; // Return true if login ID exists, false otherwise
 }
 
+// Function to manage tasks based on user's choice
 void taskManager(struct Credentials user,int choice)
 {
     bool continueTasks = false;
@@ -508,7 +518,7 @@ void taskManager(struct Credentials user,int choice)
             default:
                 printf("Invalid choice. Please choose a valid option.\n");
                 sleep(5);
-                choice=mainMenu();
+                choice=mainMenu();    // Assuming mainMenu() returns the user's choice
                 goto retry;
         }
 
@@ -521,9 +531,10 @@ void taskManager(struct Credentials user,int choice)
 
     }while(continueTasks);
 
-    taskManager(user,mainMenu());
+    taskManager(user,mainMenu()); // Recursively call taskManager with the user's choice from the main menu
 }
 
+// Function to display the ToDo list for a user
 int seeToDoList(struct Credentials user)
 {
     int serial=0;
@@ -585,7 +596,8 @@ int seeToDoList(struct Credentials user)
         }
 
         fclose(file);
-        return serial;
+        return serial;  // Return the total number of tasks displayed
+
     }
 }
 
