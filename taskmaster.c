@@ -601,14 +601,15 @@ int seeToDoList(struct Credentials user)
 
     }
 }
-
+// Function to add a new task to the to-do list
 void addTask(struct Credentials user)
 {
     system("cls");
     printf("********************************************************************\n");
     printf("*                      Add New Task                                *\n");
     printf("********************************************************************\n");
-
+  
+   // Generate the file's name based on the user's loginID
     char fileName[50];
     sprintf(fileName, "Program Data/%ld.txt", user.loginID); // Generate the file's name based on the user's loginID
 
@@ -618,8 +619,11 @@ void addTask(struct Credentials user)
         printf("Error opening file.\n");
         return;
     }
-
+ 
+    // Create a new Task structure to store task details
     struct Task newTask;
+   
+    // Prompt the user to enter task details
     printf("Enter task name (up to 19 characters): ");
     scanf("%19s", newTask.taskname);
 
@@ -629,6 +633,7 @@ void addTask(struct Credentials user)
     printf("Enter task completion percentage: ");
     scanf("%d", &newTask.percent_complete);
 
+     // Determine task completion status based on percentage
     if(newTask.percent_complete<100)
     {
         newTask.completed = false; // Initialize to false
@@ -648,7 +653,8 @@ void addTask(struct Credentials user)
 
     printf("Enter task category (up to 19 characters): ");
     scanf("%19s", newTask.category);
-
+   
+    // Write task details to the file
     fprintf(file, "Task Name: %s\n", newTask.taskname);
     fprintf(file, "Description: %s\n", newTask.description);
     fprintf(file, "Completion Percentage: %d\n", newTask.percent_complete);
