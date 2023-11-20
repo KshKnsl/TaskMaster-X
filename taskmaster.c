@@ -789,52 +789,68 @@ void updateToDoList(struct Credentials user)
     fclose(tempFile);
     sleep(2);
 }
-
+// Function to delete a task from the to-do list
 void deleteToDoList(struct Credentials user)
 {
+// Clear the console screen for a cleaner UI
     system("cls");
+ // Display a header for the delete to-do list section   
     printf("********************************************************************\n");
     printf("*                   Delete To-Do List                              *\n");
     printf("********************************************************************\n");
 
+// Define variables for file and line handling
     char filename[20];
     char line[1000];
+// Construct the filename based on the user's loginID
     sprintf(filename, "Program Data/%ld.txt", user.loginID);
+// Introduce a brief delay for user experience
     sleep(1);
 
+// Get the total number of tasks and display them for the user
     int taskNumber=seeToDoList(user);
     int taskChoice, serial = 0;
     char task[100];
 
+// Open the original file in read mode
     FILE *file = fopen(filename, "r");
     if(file == NULL)
     {
+        // Print an error message if the file cannot be opened
         printf("Error opening file!\n");
         return ;
     }
 
+    // Open a temporary file in write mode
     FILE *tempFile = fopen("Program Data/temp.txt", "w");
     if(tempFile == NULL)
     {
+                // Print an error message if the temp file cannot be opened
         printf("Error opening file!\n");
+                // Close the original file before returning
         fclose(file);
         return ;
     }
-
+// Prompt the user to enter the task number to delete
     printf("Enter task number to delete: ");
+    // Validate user input for taskChoice
     scanf("%d", &taskChoice);
     if(taskChoice<=0||taskChoice>taskNumber)
     {
+// Print an error message for invalid taskChoice
         printf("No task selected or invalid task number.\n");
         fclose(file);
         return;
     }
 
+// Iterate through lines in the original file
     while(fgets(line, sizeof(line), file) != NULL)
     {
+        // Check if the line contains task information
         if(strstr(line, "Task Name:")!=NULL)
         {
             serial++;
+// If the current task matches the chosen task for deletion, skip its lines
             if(serial==taskChoice)
             {
                 fgets(line, sizeof(line), file);
@@ -846,57 +862,79 @@ void deleteToDoList(struct Credentials user)
                 fgets(line, sizeof(line), file);
                 fgets(line, sizeof(line), file);
             }
-            else        fprintf(tempFile, "%s", line);
+            else
+         // If the task doesn't match, write it to the temp file
+        fprintf(tempFile, "%s", line);
         }
-        else    fprintf(tempFile, "%s", line);
+        else  
+            // If the line doesn't contain task information, write it to the temp file
+          fprintf(tempFile, "%s", line);
     }
 
+    // Close both the original and temp files
     fclose(file);
     fclose(tempFile);
     printf("Task deleted successfully.\n");
     sleep(2);
 }
 
+// Function to edit tasks in the to-do list
 void editTasks(struct Credentials user)
 {
+     // Clear the console screen for a cleaner UI   
     system("cls");
+        // Display a header for the edit tasks section
     printf("********************************************************************\n");
     printf("*                      Edit Tasks                                  *\n");
     printf("********************************************************************\n");
 
+    // Define variables for file and line handling
     char filename[20];
     char line[1000];
+        // Construct the filename based on the user's loginID
     sprintf(filename, "Program Data/%ld.txt", user.loginID);
+        // Introduce a brief delay for user experience
     sleep(1);
 
+    // Open the original file in read mode
     FILE *file = fopen(filename, "r");
     if(file == NULL)
     {
+    // Print an error message if the file cannot be opened
         printf("Error opening the original file.\n");
         return;
     }
 
+    // Get the total number of tasks and display them for the user
     int taskNumber=seeToDoList(user);
     int taskChoice,currentTask= 0;
 
+    // Open an editable file in write mode
     FILE *edit = fopen("Program Data/edit.txt", "w");
     if(edit == NULL)
     {
+     // Print an error message if the editable file cannot be created
         printf("Error creating the editable file.\n");
+     // Close the original file before returning
         fclose(file);
         return;
     }
 
+    // Prompt the user to enter the task number to edit
     printf("Enter the task number you want to edit (0 to exit): ");
     scanf("%d", &taskChoice);
 
+    // Validate user input for taskChoice
     if(taskChoice<=0||taskChoice>taskNumber)
     {
+    // Print an error message for invalid taskChoice
         printf("INVALID INPUT!! Exiting without changes.\n");
+    // Close the editable file before returning
         fclose(edit);
         return;
     }
 
+    // Display options for editing a task
     printf("Enter what you want to edit in the selected task: \n");
     printf("1.) Task name\n");
     printf("2.) Task description\n");
@@ -908,21 +946,27 @@ void editTasks(struct Credentials user)
     printf("Enter your choice : ");
     int z;
     scanf("%d", &z);
+        // Iterate through lines in the original file
     while(fgets(line, sizeof(line), file) != NULL)
     {
+      // Check if the line contains task information
         if(strstr(line, "Task Name:")!=NULL)
         {
             currentTask++;
+     // If the current task matches the chosen task for editing
             if(currentTask == taskChoice)
             {
                 switch(z)
                 {
+    // Handle user choices for editing
                     case 0:
+    // Exit editing                
                         escape();
                         break;
-
+    // Add cases for other editing options as needed
                     case 1:
                     {
+                        // Edit task name
                         char newTaskName[20];
                         printf("Enter the new task name (up to 19 characters): ");
                         scanf("%19s", newTaskName);
@@ -930,6 +974,7 @@ void editTasks(struct Credentials user)
                         break;
                     }
                     case 2:
+                    {// Edit task description
                         fprintf(edit, "%s", line);
                         fgets(line, sizeof(line),file);
                         char newDescription[500];
@@ -937,8 +982,9 @@ void editTasks(struct Credentials user)
                         scanf(" %[^\n]", newDescription);
                         fprintf(edit, "Description: %s\n", newDescription);
                         break;
-
+                    }
                     case 3:
+                    {// Edit task priority
                         fprintf(edit, "%s", line);
                         fgets(line, sizeof(line),file);
                         fprintf(edit, "%s", line);
@@ -952,8 +998,9 @@ void editTasks(struct Credentials user)
                         scanf("%d", &newPriority);
                         fprintf(edit, "Priority: %d\n", newPriority);
                         break;
-
+                    }
                     case 4:
+                    {// Edit task last date
                         fprintf(edit, "%s", line);
                         fgets(line, sizeof(line),file);
                         fprintf(edit, "%s", line);
@@ -970,8 +1017,9 @@ void editTasks(struct Credentials user)
                         scanf("%d", &newLastDate);
                         fprintf(edit, "Last Date: %d\n", newLastDate);
                         break;
-
+                    }
                     case 5:
+                    {// Edit task last time
                         fprintf(edit, "%s", line);
                         fgets(line, sizeof(line),file);
                         fprintf(edit, "%s", line);
@@ -990,8 +1038,9 @@ void editTasks(struct Credentials user)
                         scanf("%d", &newLastTime);
                         fprintf(edit, "Last Time: %d\n", newLastTime);
                         break;
-
+                    }
                     case 6:
+                    {        // Edit task category
                         fprintf(edit, "%s", line);
                         fgets(line, sizeof(line),file);
                         fprintf(edit, "%s", line);
@@ -1012,28 +1061,34 @@ void editTasks(struct Credentials user)
                         scanf("%19s", newCategory);
                         fprintf(edit, "Category: %s\n", newCategory);
                         break;
-
+                    }
                     default:
+                    {    // Handle invalid option
                         printf("Invalid option.\n");
+                    // Introduce a brief delay for user experience
                         sleep(2);
+                    // Return to the task manager
                         taskManager(user,mainMenu());
+                }
                 }
             }
             else
-            {
+            {    // Continue writing lines to the edited file
                 fprintf(edit, "%s", line);
             }
         }
+        // Continue writing lines to the edited file
         else
         {
             fprintf(edit, "%s", line);
         }
     }
 
+// Close both the original and edited files after completing the editing process
     fclose(file);
     fclose(edit);
 
-    //Reopen the file
+// Reopen the original file in write mode to overwrite its contents
     file = fopen(filename, "w");
     if(file == NULL)
     {
@@ -1041,6 +1096,7 @@ void editTasks(struct Credentials user)
         return;
     }
 
+// Reopen the edited file in read mode
     edit = fopen("Program Data/edit.txt", "r");
 
     if(edit == NULL)
@@ -1050,25 +1106,32 @@ void editTasks(struct Credentials user)
         return;
     }
 
+// Copy the edited content back to the original file
     while(fgets(line, sizeof(line), edit) != NULL)
     {
         fprintf(file, "%s", line);
     }
 
+// Close both the original and edited files after completing the copying process
     fclose(file);
     fclose(edit);
     printf("Task editing complete.\n");
 }
 
+// Function to filter tasks in the to-do list
 void filterToDoList(struct Credentials user)
 {
+        // Clear the console screen for a cleaner UI
     system("cls");
+        // Set console text color to green on black
     system("color 0B");
 
+    // Display a header for the filter to-do list section
     printf("********************************************************************\n");
     printf("*                    Filter To-Do List                            *\n");
     printf("********************************************************************\n");
 
+    // Prompt the user to choose a filter option
     Retry:
     printf("Filter Options:\n");
     printf("1. Show Only Completed Tasks\n");
@@ -1078,33 +1141,39 @@ void filterToDoList(struct Credentials user)
     printf("5. Filter by Category\n");
     printf("0. Return to MAIN MENU\n");
 
+    // Read the user's choice
     printf("Enter your choice: ");
     int filterChoice;
     scanf("%d", &filterChoice);
 
+    // Define the filename based on the user's loginID
     char filename[20];
     sprintf(filename, "Program Data/%ld.txt", user.loginID);
+        // Open the original file in read mode
     FILE *file = fopen(filename, "r");
 
+    // Check if the file can be opened
     if(file == NULL)
     {
         printf("Error opening file!\n");
         return;
     }
 
+    // Initialize variables for task information and line reading
     int serial = 1;
     char line[1000];
 
+    // Switch statement to handle different filter options
     switch (filterChoice)
     {
     case 0:
+    {    // Case 0: Return to the MAIN MENU
         fclose(file);
         system("color 07");
         taskManager(user,mainMenu());
-
+    }
     case 1:
-    {
-        // Show Only Completed Tasks
+    {    // Case 1: Show Only Completed Tasks
         system("color 0A");
 
         printf("**********************************************************************************************************************************************\n");
