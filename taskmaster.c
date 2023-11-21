@@ -124,7 +124,7 @@ void escape()
         
 
         // Pause for 2 seconds
-        sleep(2);
+        sleep(1);
         system("cls");
 
         // Display a feedback prompt
@@ -177,7 +177,7 @@ void escape()
         // Display a goodbye message
         printf("\nGoodbye! Have a great day!\n");
         // Pause for 2 seconds
-        sleep(2);
+        sleep(1);
         // Clears the screen
         system("cls");
         // Exit the program
@@ -272,7 +272,7 @@ bool readCredentialsFromFile(long loginID, long Password)
 void login()
 {
     // Pause for 2 seconds, clear screen, and set console text color
-    sleep(2);
+    sleep(1);
     system("cls");
     system("color E1");
 
@@ -300,7 +300,7 @@ void login()
         printf("\nMAIN MENU Loading.....\n");
 
         // Pause for 5 seconds
-        sleep(5);
+        sleep(2);
 
         // Gets user choice from the main menu
         int choice = mainMenu();
@@ -352,7 +352,7 @@ void createAccount()
     char name[50];
     int dob = 0;
     struct Credentials newUser;
-    sleep(2);
+    sleep(1);
     system("cls");
     system("color 2f");
     struct Credentials user;
@@ -518,7 +518,7 @@ void taskManager(struct Credentials user,int choice)
                 escape();
             default:
                 printf("Invalid choice. Please choose a valid option.\n");
-                sleep(5);
+                sleep(2);
                 choice=mainMenu();    // Assuming mainMenu() returns the user's choice
                 goto retry;
         }
@@ -664,7 +664,7 @@ void addTask(struct Credentials user)
     fclose(file);
     //prints success message
     printf("Task added successfully.\n");
-    sleep(2);
+    sleep(1);
 }
 
 // Function to update the To-Do List for a given user
