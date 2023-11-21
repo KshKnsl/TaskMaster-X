@@ -130,13 +130,14 @@ void escape()
         // Display a feedback prompt
         printf("\n\n");
         system("color 2E");
-        int choice = 1;
+        int choice = 0;
         printf("Would you like to provide feedback? (1: Yes, 2: No): ");
        
+        fflush(stdin);
         scanf("%d", &choice);
 
         // If the user chooses to provide feedback
-        if(choice == 1) fflush(stdin);
+        if(choice==1)
         {
             // Feedback form
             char feedback[1000];
@@ -171,6 +172,7 @@ void escape()
             printf("4. ****\n");
             printf("5. *****\n");
             int rate;
+            fflush(stdin);
             scanf("%d", &rate);
         }
 

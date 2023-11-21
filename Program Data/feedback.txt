@@ -1,2 +1,8 @@
 good work
 great work keep it upchanges done successfully
+
+lfned
+
+cd "c:\Users\Kush\OneDrive\Documents\College Assignments\SDF1 LAB C\TaskMaster-X\" ; if ($?) { gcc taskmaster.c -o taskmaster } ; if ($?) { .\taskmaster }
+
+ff
