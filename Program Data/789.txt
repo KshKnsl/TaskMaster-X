@@ -7,15 +7,6 @@ Last Date: 1
 Last Time: 1
 Category: 1
 
-Task Name: physicsassignment
-Description: 1
-Completion Percentage: 30
-Completed: 0
-Priority: 2
-Last Date: 2
-Last Time: 2
-Category: 2
-
 Task Name: Tutorials
 Description: 3
 Completion Percentage: 100
