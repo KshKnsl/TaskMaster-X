@@ -10,7 +10,7 @@
 struct Credentials
 {
     long loginID;
-    long Password;  
+    long Password;
     bool verified;
     char name[50];
 };
@@ -102,7 +102,7 @@ void escape()
     // asks user for exit confirmation
     printf("\nAre you sure you want to exit?(YES/NO)---");
     char ch;
-    
+
     // Read the user's choice (consume newline characters)
     scanf("%c", &ch);
     scanf("%c",&ch);
@@ -110,7 +110,7 @@ void escape()
     // Check if the user chose to exit
     if(ch == 'Y' || ch == 'y')
     {
-       
+
         system("cls");
         system("color 3E");
           printf("\n\t\t\t\t\t\t  ________________________________________________________________________");
@@ -121,7 +121,7 @@ void escape()
           printf("\n\t\t\t\t\t\t||     ||     |     | /      \\ |   \\ | |\\           |    |     | |    |   ||");
           printf("\n\t\t\t\t\t\t||     ||     |     |/        \\|    \\| | \\          |    |=====| |====|   ||");
           printf("\n\t\t\t\t\t\t||________________________________________________________________________||\n");
-        
+
 
         // Pause for 2 seconds
         sleep(1);
@@ -312,7 +312,7 @@ void login()
     {
         // Display login failure message and provide options
         printf("Login failed. Please check your credentials or create a new account.\n");
-        
+
         // Label for the retry options
         DEFAULT:
 
@@ -328,19 +328,19 @@ void login()
         // Switch statement to handle user choices
         switch (choice)
         {
-            case 1:    
+            case 1:
                 createAccount();
                 break;
-            case 2:    
+            case 2:
                 homePage();
                 break;
-            case 3:   
+            case 3:
                 login();
                 break;
-            case 4:  
+            case 4:
                 escape();
                 break;
-            default:   
+            default:
                 goto DEFAULT;
         }
     }
@@ -367,7 +367,7 @@ void createAccount()
     scanf("%49s", name);
      // Validate the entered name
     if(validateName(name))
-    {   
+    {
          // Copy validated name to the newUser structure
          strcpy(newUser.name,name);
          printf("----------Name Validated Successfully----------- \n");
@@ -377,15 +377,15 @@ void createAccount()
         printf("\nInvalid Name. Please use only letters and spaces.Retry.....");
         goto retry1;
     }
-    
+
      // Label for the date of birth validation retry
     retry2:
     printf("Enter your date of birth (format DDMMYY): ");
     scanf("%d", &dob);
-    
+
      // Validate the entered date of birth
     if(!validate(dob))
-    {   
+    {
          // Display error message for an invalid date of birth and retry
         printf("\nWrong Date of birth......Retry.....");
         goto retry2;
@@ -416,7 +416,7 @@ void createAccount()
 
      // Set the verified flag to true
     newUser.verified = true;
-    
+
     // Write the new user credentials to the file
     writeCredentialsToFile(newUser.loginID, newUser.Password);
     printf("\nAccount created successfully!\n");
@@ -432,7 +432,7 @@ bool validate(int dob)
     int day=dob/10000;
     int month=(dob/100)%100;
     int year=dob%100;
-    // Checkinging for valid year, month, and day 
+    // Checkinging for valid year, month, and day
     if(year<0||year>99||month<1||month>12||day<1||day>31)
     {
          return false;
@@ -470,10 +470,10 @@ bool loginIDExists(long loginID)
     long storedLoginID, storedPassword;
     bool found=false;
     char line[100];
-   
+
      // Reading each line from the file
     while(fgets(line,sizeof(line),file)!=NULL)
-    {   
+    {
         // Extracting stored login ID and password from the line
         sscanf(line,"%ld,%ld",&storedLoginID,&storedPassword);
         // Checking if the provided login ID matches any stored login ID
@@ -650,7 +650,7 @@ void addTask(struct Credentials user)
 
     printf("Enter task category (up to 19 characters): ");
     scanf("%19s", newTask.category);
-   
+
      // Write task details to the file
     fprintf(file, "Task Name: %s\n", newTask.taskname);
     fprintf(file, "Description: %s\n", newTask.description);
@@ -692,7 +692,7 @@ void updateToDoList(struct Credentials user)
       // Prompt the user to enter the task number to update
     printf("Enter the task number you want to update (0 to exit): ");
     scanf("%d", &taskChoice);
-  
+
   // Checks if user enters a valid tasknumber
     if(taskChoice<=0||taskChoice>taskNumber)
     {
@@ -726,11 +726,11 @@ void updateToDoList(struct Credentials user)
             {
                 printf("Enter updated completion percentage: ");
                 scanf("%d", &percent);
-                
+
                 // Write the updated completion percentage to the temporary file
                 fprintf(tempFile, "Completion Percentage: %d\n",percent);
                 printf("To-Do List updated successfully.\n");
-               
+
                 // Determine the completion status based on the updated percentage
                 if(percent>=100)
                 {
@@ -794,7 +794,7 @@ void deleteToDoList(struct Credentials user)
 {
 // Clear the console screen for a cleaner UI
     system("cls");
- // Display a header for the delete to-do list section   
+ // Display a header for the delete to-do list section
     printf("********************************************************************\n");
     printf("*                   Delete To-Do List                              *\n");
     printf("********************************************************************\n");
@@ -808,7 +808,7 @@ void deleteToDoList(struct Credentials user)
     sleep(1);
 
 // Get the total number of tasks and display them for the user
-    int taskNumber=seeToDoList(user);
+    int taskNumber=seeToDoList(user)-1;
     int taskChoice, serial = 0;
     char task[100];
 
@@ -834,7 +834,9 @@ void deleteToDoList(struct Credentials user)
 // Prompt the user to enter the task number to delete
     printf("Enter task number to delete: ");
     // Validate user input for taskChoice
+    fflush(stdin);
     scanf("%d", &taskChoice);
+    
     if(taskChoice<=0||taskChoice>taskNumber)
     {
 // Print an error message for invalid taskChoice
@@ -866,7 +868,7 @@ void deleteToDoList(struct Credentials user)
          // If the task doesn't match, write it to the temp file
         fprintf(tempFile, "%s", line);
         }
-        else  
+        else
             // If the line doesn't contain task information, write it to the temp file
           fprintf(tempFile, "%s", line);
     }
@@ -875,13 +877,41 @@ void deleteToDoList(struct Credentials user)
     fclose(file);
     fclose(tempFile);
     printf("Task deleted successfully.\n");
+    
+    file = fopen(filename, "w");
+    if(file == NULL)
+    {
+        printf("Error opening the file.\n");
+        return;
+    }
+
+    // Reopen the temp file in read mode
+    tempFile = fopen("Program Data/temp.txt", "r");
+
+    if(tempFile == NULL)
+    {
+        printf("Error creating the temporary file.\n");
+        fclose(file);
+        return;
+    }
+
+    // Copy the revised content back to the original file
+    while(fgets(line, sizeof(line), tempFile) != NULL)
+    {
+        fprintf(file, "%s", line);
+    }
+
+// Close both the original and edited files after completing the copying process
+    fclose(file);
+    fclose(tempFile);
     sleep(2);
+    
 }
 
 // Function to edit tasks in the to-do list
 void editTasks(struct Credentials user)
 {
-     // Clear the console screen for a cleaner UI   
+     // Clear the console screen for a cleaner UI
     system("cls");
         // Display a header for the edit tasks section
     printf("********************************************************************\n");
@@ -894,7 +924,7 @@ void editTasks(struct Credentials user)
         // Construct the filename based on the user's loginID
     sprintf(filename, "Program Data/%ld.txt", user.loginID);
         // Introduce a brief delay for user experience
-    sleep(1);
+    sleep(2);
 
     // Open the original file in read mode
     FILE *file = fopen(filename, "r");
@@ -960,7 +990,7 @@ void editTasks(struct Credentials user)
                 {
     // Handle user choices for editing
                     case 0:
-    // Exit editing                
+    // Exit editing
                         escape();
                         break;
     // Add cases for other editing options as needed
