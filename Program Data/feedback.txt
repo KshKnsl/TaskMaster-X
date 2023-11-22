@@ -1,4 +1,12 @@
 good work
 great work keep it upchanges done successfully
 
+<<<<<<< HEAD
 Bugs fixing
+=======
+lfned
+
+cd "c:\Users\Kush\OneDrive\Documents\College Assignments\SDF1 LAB C\TaskMaster-X\" ; if ($?) { gcc taskmaster.c -o taskmaster } ; if ($?) { .\taskmaster }
+
+ff
+>>>>>>> 75254182089b4b322683fe0d3deb640e0ee1103e
