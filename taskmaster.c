@@ -629,9 +629,15 @@ void addTask(struct Credentials user)
     printf("Enter task description (up to 499 characters): ");
     scanf(" %[^\n]", newTask.description);
 
+    retry:
     printf("Enter task completion percentage: ");
     scanf("%d", &newTask.percent_complete);
-
+    if(newTask.percent_complete<0||newTask.percent_complete>100)
+    {
+         // Display error message for an invalid input
+        printf("\nWrong INPUT ......Retry.....");
+        goto retry;
+    }
     // Determine task completion status based on percentage
     if(newTask.percent_complete<100)
     {
@@ -641,11 +647,30 @@ void addTask(struct Credentials user)
     {
         newTask.completed = true;
     }
+
+    retry3:
     printf("Enter task priority (1-5): ");
     scanf("%d", &newTask.priority);
-
+    if(newTask.priority<0||newTask.priority>5)
+    {
+         // Display error message for an invalid input
+        printf("\nWrong INPUT ......Retry.....");
+        goto retry3;
+    }
+    
+    retry2:
     printf("Enter last date to complete the task: ");
     scanf("%d", &newTask.lastDate);
+    if(!validate(newTask.lastDate))
+    {
+         // Display error message for an invalid date and retry
+        printf("\nWrong Date Format(USE DDMMYY)......Retry.....");
+        goto retry2;
+    }
+    else
+    {
+        printf("-----------Date Validated Successfully------------ \n");
+    }
 
     printf("Enter last time to complete the task: ");
     scanf("%d", &newTask.time);
@@ -1445,19 +1470,15 @@ void filterToDoList(struct Credentials user)
 
                     fgets(line, sizeof(line), file);
                     sscanf(line, "Completed: %d", &task.completed);
-
                     fgets(line, sizeof(line), file);
                     sscanf(line, "Priority: %d", &task.priority);
-
                     fgets(line, sizeof(line), file);
                     sscanf(line, "Last Date: %d", &task.lastDate);
-
                     fgets(line, sizeof(line), file);
                     sscanf(line, "Last Time: %d", &task.time);
 
                     fgets(line, sizeof(line), file);
                     sscanf(line, "Category: %19s", task.category);
-
                     fgets(line, sizeof(line), file);
 
                     if(strcmp(task.category, category) == 0)
@@ -1468,15 +1489,12 @@ void filterToDoList(struct Credentials user)
                     }
                 }
             }
-
             break;
         }
-
         default:
             printf("Invalid choice. Please enter a number between 0 and 5.\n");
             goto Retry;
     }
-
     fclose(file);
     sleep(2);
 }
