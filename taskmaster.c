@@ -1312,7 +1312,7 @@ void filterToDoList(struct Credentials user)
             // Filter by Priority
             int priority;
             printf("Enter priority to filter tasks: ");
-            scanf("%d", &1priority);
+            scanf("%d", &priority);
 
             system("color 0E");  // Change text to yellow and background to black
 
