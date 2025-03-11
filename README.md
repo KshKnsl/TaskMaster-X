@@ -51,3 +51,5 @@ Contributions are welcome! If you find any issues or have suggestions for improv
 
 ## Acknowledgments
 Special thanks to anyone whose code or libraries were used in this project.
+
+![image](https://github.com/user-attachments/assets/bbe8cb6f-0471-4931-bb70-dfc2bb27c9dd)
